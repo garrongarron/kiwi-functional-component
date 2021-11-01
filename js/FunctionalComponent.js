@@ -1,8 +1,10 @@
+const FIRST_TIME = Symbol('firstTime')
+const STATE_INDEX = Symbol('firstTime')
+const DEFAUT_STATE_DONE = Symbol('firstTime') //defaultStateDone
+const SET_PTOPERTIES = Symbol('setProperties') //defaultStateDone
+
 let functional = {
     beforeAppendChild: function (parentNode) { },
-    stateIndex: 0,
-    defaultStateDone: false,
-    _firstTime: true,
     _map: function (callback) {
         if (Array.isArray(this))
             return this.map(callback).join('')
@@ -19,7 +21,7 @@ let functional = {
                     (noProp.includes(node.attributes[index].value))
                         ? node.attributes[index].value
                         : this[node.attributes[index].value]();
-                if (noProp.includes(node.attributes[index].value)) 
+                if (noProp.includes(node.attributes[index].value))
                     console.warn(`Atttribute Value '${node.attributes[index].value}' as string due it is a reserved keyword`);
 
             } else {
@@ -64,14 +66,15 @@ let functional = {
     },
     exec: function (again) {
         var node = document.createElement('section');
-        this.stateIndex = 0
+        this[STATE_INDEX] = 0
         this.template = this.constructor(this.prop)
-        this.defaultStateDone = true
+        this[DEFAUT_STATE_DONE] = true
         node.innerHTML = this.template
         this.settingListener(node)
         this.addChild(node)
-        if (this._firstTime) {
-            this._firstTime = false
+        console.log(this[FIRST_TIME]);
+        if (this[FIRST_TIME]) {
+            this[FIRST_TIME] = false
             this.beforeAppendChild(node)
         }
         this.node = node.children[0]
@@ -82,8 +85,8 @@ let functional = {
     },
     useState: function (value) {
         if (!this.state) this.state = {}
-        let n = this.stateIndex++
-        if (!this.defaultStateDone)
+        let n = this[STATE_INDEX]++
+        if (!this[DEFAUT_STATE_DONE])
             this.state[n] = value
         return [
             (typeof value == 'undefined') ? value : JSON.parse(JSON.stringify(this.state[n])),
@@ -95,6 +98,11 @@ let functional = {
         ]
     }
 }
+functional[FIRST_TIME] = true
+functional[STATE_INDEX] = 0
+functional[DEFAUT_STATE_DONE] = false
+
+
 Object.prototype.getComponent = (Component) => {
     return new Component({}, true)
 }
