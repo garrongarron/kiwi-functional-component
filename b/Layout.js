@@ -1,6 +1,6 @@
 import header from "./Header.js";
 import Section from "./Section.js";
-import ThreeColumns from "./ThreeColumns.js";
+import ThreeColumns from "./threeCol/ThreeColumns.js";
 import LiveExample from "./LiveExample.js";
 import Footer from "./Footer.js";
 import Pricing from "./Pricing.js";

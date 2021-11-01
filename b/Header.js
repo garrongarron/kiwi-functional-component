@@ -3,7 +3,7 @@ import Logo from "./Logo.js"
 export default function Header() {
     this.enableSubComponents([Logo])
     return `
-<header>
+<header class="fixed-top">
   <div class="bg-dark collapse" id="navbarHeader" style="">
     <div class="container">
       <div class="row">
