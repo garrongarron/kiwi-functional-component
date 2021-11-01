@@ -38,7 +38,6 @@ let publicMethods = {
     },
     template: 'template'
 }
-function Component() { }
 let privateMethods = function () {
     this[FIRST_TIME] = true
     this[STATE_INDEX] = 0
@@ -68,8 +67,7 @@ let privateMethods = function () {
             let nodeList = parent.querySelectorAll(subComponent.name.toLowerCase())
             for (let index = 0; index < nodeList.length; index++) {
                 const node = nodeList[index];
-                Object.assign(Component.prototype, component)
-                let instanceComponet = new Component()
+                let instanceComponet = new emptyComponent()
                 let prop = this[SET_PTOPERTIES](node.attributes)
                 Object.assign(instanceComponet.prop, prop)
                 instanceComponet.constructor = subComponent
@@ -113,9 +111,11 @@ let privateMethods = function () {
     return this
 }
 const component = privateMethods.bind(publicMethods)()
-
+function emptyComponent() { }
+Object.assign(emptyComponent.prototype, component)
 let getComponent = (Component) => {
-    Object.assign(Component.prototype, component)
-    return new Component({}, true)
+    let instanceComponet = new emptyComponent()
+    instanceComponet.constructor = Component
+    return instanceComponet
 }
 export default getComponent
