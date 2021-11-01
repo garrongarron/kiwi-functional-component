@@ -67,10 +67,9 @@ let privateMethods = function () {
             let nodeList = parent.querySelectorAll(subComponent.name.toLowerCase())
             for (let index = 0; index < nodeList.length; index++) {
                 const node = nodeList[index];
-                let instanceComponet = new emptyComponent()
                 let prop = this[SET_PTOPERTIES](node.attributes)
+                let instanceComponet = getComponent(subComponent)
                 Object.assign(instanceComponet.prop, prop)
-                instanceComponet.constructor = subComponent
                 let newNode = instanceComponet[EXEC]()
                 node.parentNode.replaceChild(newNode, node)
             }
