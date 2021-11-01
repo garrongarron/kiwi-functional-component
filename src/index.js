@@ -1,5 +1,6 @@
-import '../js/FunctionalComponent.js';
+// import '../js/FunctionalComponent.js';
+import getComponent from '../js/FunctionalComponent.js';
 import App from './documentation/Layout.js';
 
-let root = App.getComponent(App)
+let root = getComponent(App)
 root.kiwiSelector('body')
