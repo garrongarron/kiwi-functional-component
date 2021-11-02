@@ -1,8 +1,27 @@
+const insideTheDom = {
+    components: [],
+    check: function () {
+        insideTheDom.components.forEach(component => {
+            if (!document.contains(component.node)) {
+                component.exit()
+            }
+        })
+    },
+    add: function (component, clean) {
+        let index = this.components.indexOf(component)
+        if (index > -1) return
+        this.components.push(component)
+        component.exit = clean
+    }
+
+}
+
 const FIRST_TIME = Symbol('firstTime')
 const STATE_INDEX = Symbol('stateIndex')
 const DEFAUT_STATE_DONE = Symbol('defaultStateDone')
 const SET_PTOPERTIES = Symbol('setProperties')
 const ADD_CHILD = Symbol('addChild')
+const CHILDREN = Symbol('children')
 const SUB_COMPONENTS = Symbol('subComponent')
 const LISTENERS = Symbol('listeners')
 const SETING_LISTENER = Symbol('settingListener')
@@ -33,12 +52,17 @@ let publicMethods = {
                 this.state[n] = newState
                 let old = this.node
                 this.node.parentNode.replaceChild(this[EXEC](true), old)//?
+                insideTheDom.check()
             }
         ]
 
     },
-    arrayDispacher: function (database = []) {
-        if(!Array.isArray(database))  {
+    outOfDom: function* generator(i) {
+        yield null;
+        yield i + 10;
+    },
+    arrayDispatcher: function (database = []) {
+        if (!Array.isArray(database)) {
             throw `Argument is not an array: '${database}' in arrayDispacher() method.`
         }
         const callbacks = []
@@ -53,7 +77,7 @@ let publicMethods = {
             database = newDatabase
             callbacks.forEach(c => c())
         }
-        return [ list, updateList, database ]
+        return [list, updateList, database]
     }
 }
 let privateMethods = function () {
@@ -83,10 +107,33 @@ let privateMethods = function () {
     this[ADD_CHILD] = function (parent) {
         this[SUB_COMPONENTS].map(subComponent => {
             let nodeList = parent.querySelectorAll(subComponent.name.toLowerCase())
+            this[CHILDREN] = this[CHILDREN] || []
+            this[CHILDREN].forEach(c => { c.free = true })
             for (let index = 0; index < nodeList.length; index++) {
                 const node = nodeList[index];
                 let prop = this[SET_PTOPERTIES](node.attributes)
-                let instanceComponet = getComponent(subComponent)
+                let instanceCached = null
+                let j = 0
+                let fromCache = false
+                for (j = 0; j < this[CHILDREN].length; j++) {
+                    const c = this[CHILDREN][j];
+                    if (c.instanceComponet.constructor.name != subComponent.name) continue;
+                    if (!c.free) continue;
+                    instanceCached = c.instanceComponet
+                    fromCache = true
+                    this[CHILDREN][j] = {
+                        free: false,
+                        instanceComponet: c.instanceComponet
+                    }
+                    break;
+                }
+                let instanceComponet = (fromCache) ? instanceCached : getComponent(subComponent)
+                if (!fromCache) {
+                    this[CHILDREN][index] = {
+                        free: false,
+                        instanceComponet
+                    }
+                }
                 Object.assign(instanceComponet.prop, prop)
                 let newNode = instanceComponet[EXEC]()
                 node.parentNode.replaceChild(newNode, node)
@@ -121,7 +168,10 @@ let privateMethods = function () {
         this[ADD_CHILD](node)
         if (this[FIRST_TIME]) {
             this[FIRST_TIME] = false
-            this.beforeAppendChild(node)
+            let clean = this.beforeAppendChild(node)
+            if(typeof  clean == 'function') {
+                insideTheDom.add(this, clean)
+            }
         }
         this.node = node.children[0]
         if (!this.node) throw `Check the return of ${this.constructor.name}` + '\n' + `${this.constructor.toString()}`
