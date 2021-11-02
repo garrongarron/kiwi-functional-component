@@ -1,14 +1,14 @@
 import getComponent from "../../js/FunctionalComponent.js"
-import Todo from "./Todo.js"
+import Remarkable from "./Remarkable.js"
 
-export default function AnApplication(){
+export default function AComponentUsingExternalPlugins(){
     this.beforeAppendChild = async (parentNode) => {
         let code = parentNode.querySelector('pre')
-        let data = await fetch('b/livecode/Todo.js')
+        let data = await fetch('react/livecode/Remarkable.js')
         data = await data.text()
         code.textContent = data
-        let component = getComponent(Todo)
-        component.kiwiSelector('.todo-app')
+        let component = getComponent(Remarkable)
+        component.kiwiSelector('.demo-external-library')
     }
     return `
     <div class="album pt-5">
@@ -18,8 +18,8 @@ export default function AnApplication(){
                 <div class="col-lg-3">
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <h3 class="text-black fw-bold">An Application</h3>
-                            <p class="card-text text-bold">Using <i>properies</i> and <i>state</i>, we can put together a small Todo application. This example uses state to track the current list of items as well as the text that the user has entered. Although event handlers appear to be rendered inline, they will be collected and implemented using event delegation.</p>
+                            <h3 class="text-black fw-bold">A Component Using External Plugins</h3>
+                            <p class="card-text text-bold">Kiwi JS really allows you to interface with other libraries and frameworks. This example uses <b>remarkable</b>, an external Markdown library, to convert the &lt;textarea&gt;’s value in real time.</p>
                         </div>
                     </div>
                 </div>
@@ -42,7 +42,7 @@ export default function AnApplication(){
                         <div class="card-header py-3 text-white bg-secondary ">
                             <h4 class="my-0 fw-normal">Result</h4>
                         </div>
-                        <div class="card-body border-secondary todo-app">
+                        <div class="card-body border-secondary demo-external-library">
                         </div>
                     </div>
                 </div>

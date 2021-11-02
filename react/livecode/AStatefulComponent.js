@@ -1,25 +1,30 @@
 import getComponent from "../../js/FunctionalComponent.js"
-import Remarkable from "./Remarkable.js"
+import State from "./State.js"
 
-export default function AComponentUsingExternalPlugins(){
+export default function AStatefulComponent(){
     this.beforeAppendChild = async (parentNode) => {
         let code = parentNode.querySelector('pre')
-        let data = await fetch('b/livecode/Remarkable.js')
+        let data = await fetch('react/livecode/State.js')
         data = await data.text()
-        code.textContent = data
-        let component = getComponent(Remarkable)
-        component.kiwiSelector('.demo-external-library')
+        code.textContent = data.replaceAll('// ', '').split('\n').filter((line, lineNumber)=>{
+            return ![0, 1, 10, 11, 12, 13].includes(lineNumber)
+        }).join('\n')
+
+        let component = getComponent(State )
+        component.kiwiSelector('.a-stateful-component')
+        
     }
     return `
     <div class="album pt-5">
         <div class="container">
             <div class="row row-cols-1 row-cols-lg-2 row-cols-lg-3 g-3">
                 <!-- left -->
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <h3 class="text-black fw-bold">A Component Using External Plugins</h3>
-                            <p class="card-text text-bold">Kiwi JS really allows you to interface with other libraries and frameworks. This example uses <b>remarkable</b>, an external Markdown library, to convert the &lt;textarea&gt;’s value in real time.</p>
+                            <h3 class="text-black fw-bold">A Stateful Component</h3>
+                            <p class="card-text text-bold">In addition to taking input data (accessed via this.prop), a component can maintain internal <b>state</b> data (accessed via <b>this.useState()</b> method)</p>
+                            <p class="card-text text-bold">When a component’s state data changes, the rendered markup will be updated by re-invoking <b>constructor()</b> method.</p>
                         </div>
                     </div>
                 </div>
@@ -30,19 +35,19 @@ export default function AComponentUsingExternalPlugins(){
                             <h4 class="my-0 fw-normal">Demo</h4>
                         </div>
                         <div class="card-body text-white">
-                            <pre style="overflow-y:scroll; max-height:200px">
+                            <pre>
                                     1
                             </pre>
                         </div>
                     </div>
                 </div>
                 <!-- demo -->
-                <div class="col-lg-3"> 
+                <div class="col-lg-2"> 
                     <div class="card mb-4 rounded-3 shadow-sm border-secondary">
                         <div class="card-header py-3 text-white bg-secondary ">
                             <h4 class="my-0 fw-normal">Result</h4>
                         </div>
-                        <div class="card-body border-secondary demo-external-library">
+                        <div class="card-body border-secondary a-stateful-component">
                         </div>
                     </div>
                 </div>

@@ -1,18 +1,9 @@
-import getComponent from "../../js/FunctionalComponent.js"
-import State from "./State.js"
-
-export default function AStatefulComponent(){
+export default function ASimpleComponent() {
     this.beforeAppendChild = async (parentNode) => {
         let code = parentNode.querySelector('pre')
-        let data = await fetch('b/livecode/State.js')
+        let data = await fetch('react/livecode/HelloMessage.js')
         data = await data.text()
-        code.textContent = data.replaceAll('// ', '').split('\n').filter((line, lineNumber)=>{
-            return ![0, 1, 10, 11, 12, 13].includes(lineNumber)
-        }).join('\n')
-
-        let component = getComponent(State )
-        component.kiwiSelector('.a-stateful-component')
-        
+        code.textContent = data
     }
     return `
     <div class="album pt-5">
@@ -22,9 +13,9 @@ export default function AStatefulComponent(){
                 <div class="col-lg-4">
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <h3 class="text-black fw-bold">A Stateful Component</h3>
-                            <p class="card-text text-bold">In addition to taking input data (accessed via this.prop), a component can maintain internal <b>state</b> data (accessed via <b>this.useState()</b> method)</p>
-                            <p class="card-text text-bold">When a component’s state data changes, the rendered markup will be updated by re-invoking <b>constructor()</b> method.</p>
+                            <h3 class="text-black fw-bold">A Simple Component</h3>
+                            <p class="card-text text-bold">Kiwi JS components doesn't implement any special method, It use a <b>functionals component</b> to takes input data and returns what to display. This example uses <b>Template literals</b> and it is not needed any syntactic sugar. Input data that is passed into the component can be accessed as parameter and  via this.prop. (We dont use props in plural)</p>
+                            <p class="card-text text-bold">There is <b>not compilation step</b> required.</p>
                         </div>
                     </div>
                 </div>
@@ -47,7 +38,8 @@ export default function AStatefulComponent(){
                         <div class="card-header py-3 text-white bg-secondary ">
                             <h4 class="my-0 fw-normal">Result</h4>
                         </div>
-                        <div class="card-body border-secondary a-stateful-component">
+                        <div class="card-body border-secondary">
+                            Hello Taylor
                         </div>
                     </div>
                 </div>
