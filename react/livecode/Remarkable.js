@@ -1,5 +1,5 @@
 import '../../js/Remarcable.js'
-// database
+// stateHander
 const callbackContainer = Symbol('callbackContainer')
 const state = {
     str:'',
