@@ -84,6 +84,7 @@ let privateMethods = function () {
             for (let index = 0; index < nodeList.length; index++) {
                 const node = nodeList[index];
                 let method = node.getAttribute(selector)
+                if(!method) throw "There is no attribute '"+selector+"' value on:\n\n"+node.outerHTML
                 node.addEventListener(selector, this[method].bind(this))
             }
         });
@@ -105,6 +106,7 @@ let privateMethods = function () {
             this.beforeAppendChild(node)
         }
         this.node = node.children[0]
+        if(!this.node) throw `Check the return of ${this.constructor.name}`+'\n'+`${this.constructor.toString()}`
         return this.node
     }
     return this
