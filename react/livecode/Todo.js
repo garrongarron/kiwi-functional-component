@@ -1,41 +1,23 @@
-// database
-const callbackContainer = Symbol('callbackContainer')
-const database = Symbol('database')
-const state = {
-    get items() {
-        return [...this[database]]
-    },
-    set items(array) {
-        this[database] = array
-        this[callbackContainer].forEach(c => c())
-    },
-    addCallback: function (callback) {
-        this[callbackContainer].push(callback)
-    }
-}
-state[callbackContainer] = []
-state[database] = []
-
 // list
-function TodoList() {
-    let [items, setImtems] = this.useState([])
-    this.beforeAppendChild = () =>{
-        state.addCallback(() => {
-            setImtems(state.items)
+function TodoList({ list }) {
+    let [items, setItems] = this.useState(list.items)
+    this.beforeAppendChild = () => {//runs only once
+        list.subscribe(() => {
+            setItems(list.items)
         })
     }
     return `
     <ul>
-        ${items.map(item => (`<li>${item}</li>`))}
+        ${items.map(item => `<li>${item}</li>`)}
     </ul>`
 }
 
 // buton
-function button() {
-    let [items, setImtems] = this.useState([])
-    this.beforeAppendChild = () =>{
-        state.addCallback(() => {
-            setImtems(state.items)
+function button({ list }) {
+    let [items, setItems] = this.useState(list.items)
+    this.beforeAppendChild = () => {//runs only once
+        list.subscribe(() => {
+            setItems(list.items)
         })
     }
     return `<button >Add #${items.length + 1}</button>`
@@ -44,21 +26,22 @@ function button() {
 // layout
 export default function Todo() {
     this.enableSubComponents([TodoList, button])
+    const [list, setList, array] = this.arrayDispatcher(['default value'])
     this.handleChange = function (e) {
-        e.preventDefault()
-        state.items = state.items.concat(
-            e.target.querySelector('input').value
-        )
+        array.push(e.target.querySelector('input').value)
+        setList(array)
         e.target.querySelector('input').value = ''
+        e.preventDefault()
     }
-    this.enableEvents(['click', 'submit'])
+    this.enableEvents(['submit'])
+    this.list = () => list
     return `<div>
     <h3>TODO</h3>
-    <TodoList></TodoList>
+    <TodoList list="list"></TodoList>
     <form submit="handleChange" >
         <label for="new-todo">What needs to be done?</label>
         <input id="new-todo" value="">
-        <button></button>
+        <button list="list"></button>
     </form>
 </div>`
 }

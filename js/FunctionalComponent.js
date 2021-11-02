@@ -33,10 +33,28 @@ let publicMethods = {
                 this.state[n] = newState
                 let old = this.node
                 this.node.parentNode.replaceChild(this[EXEC](true), old)//?
-            },
+            }
         ]
+
     },
-    template: 'template'
+    arrayDispacher: function (database = []) {
+        if(!Array.isArray(database))  {
+            throw `Argument is not an array: '${database}' in arrayDispacher() method.`
+        }
+        const callbacks = []
+        const list = {
+            get items() { return [...database] },
+            subscribe: function (callback) {
+                callbacks.push(callback)
+            }
+        }
+        let updateList = (newDatabase) => {
+            console.log(newDatabase);
+            database = newDatabase
+            callbacks.forEach(c => c())
+        }
+        return [ list, updateList, database ]
+    }
 }
 let privateMethods = function () {
     this[FIRST_TIME] = true
@@ -84,7 +102,7 @@ let privateMethods = function () {
             for (let index = 0; index < nodeList.length; index++) {
                 const node = nodeList[index];
                 let method = node.getAttribute(selector)
-                if(!method) throw "There is no attribute '"+selector+"' value on:\n\n"+node.outerHTML
+                if (!method) throw "There is no attribute '" + selector + "' value on:\n\n" + node.outerHTML
                 node.addEventListener(selector, this[method].bind(this))
             }
         });
@@ -106,7 +124,7 @@ let privateMethods = function () {
             this.beforeAppendChild(node)
         }
         this.node = node.children[0]
-        if(!this.node) throw `Check the return of ${this.constructor.name}`+'\n'+`${this.constructor.toString()}`
+        if (!this.node) throw `Check the return of ${this.constructor.name}` + '\n' + `${this.constructor.toString()}`
         return this.node
     }
     return this
