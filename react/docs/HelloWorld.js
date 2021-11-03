@@ -3,7 +3,7 @@ import DisplayCode from "../livecode/DisplayCode.js"
 export default function HelloWorld(){
     this.beforeAppendChild = async (parentNode) => {
         let code = parentNode.querySelector('code')
-        let data = await fetch('react/livecode/HelloMessage.js')
+        let data = await fetch('react/docs/snippets/HelloWorld.js')
         data = await data.text()
         code.textContent = data
         Prism.highlightAll();

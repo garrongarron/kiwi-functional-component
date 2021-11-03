@@ -1,20 +1,27 @@
 import eventBus from "../../src/basic/EventBus.js"
 
-export default function Aside(){
-  let list = 'HelloWorld IntroducingTemplateLiterals RenderingElements ComponentsAndProps StateAndLifecycle HandlingEvents ConditionalRendering '+
-  'ListAndKeys Forms LiftingStateUp CompositionVsInheritance ThinkingInReact'
+export default function Aside() {
+  let list = 'HelloWorld IntroducingTemplateLiterals RenderingElements ComponentsAndProps StateAndLifecycle HandlingEvents ConditionalRendering ' +
+    'ListAndKeys Forms LiftingStateUp CompositionVsInheritance ThinkingInReact'
   list = list.split(' ')
-    this.goto = (e) =>{
-      eventBus.dispatch('Docs-page',e.target.getAttribute('index')*1)
-      e.preventDefault()
-    }
-    this.enableEvents(['click'])
-    return `<div class="col-md-4">
+  this.goto = (e) => {
+    eventBus.dispatch('Docs-page', e.target.getAttribute('index') * 1)
+    e.preventDefault()
+    
+    e.target.parentNode.parentNode.querySelectorAll('a').forEach(a=>{
+      a.classList.remove('k-color-2')
+    })
+    // e.currentTarget.classList.remove('k-color-2')
+    e.currentTarget.classList.add('k-color-2')
+    console.log(e.target);
+  }
+  this.enableEvents(['click'])
+  return `<div class="col-md-4">
     <div class="position-sticky" style="top: 4rem; padding-bottom: 4rem"> 
       <div class="p-4">
         <h4 class="fst-italic">Main concepts</h4>
         <ol class="list-unstyled mb-0">
-          ${list.map((link, index)=>`<li><a href="#"  click="goto" index="${index}">${link}</a></li>`)}
+          ${list.map((link, index) => `<li><a href="#"  click="goto" index="${index}">${link}</a></li>`)}
         </ol>
       </div>
 

@@ -13,8 +13,9 @@ import RenderingElements from "../docs/RenderingElements.js";
 import StateAndLifecycle from "../docs/StateAndLifecycle.js";
 import ThinkingInReact from "../docs/ThinkingInReact.js";
 
-export default function Docs() {
-    this.enableSubComponents([Aside, HelloWorld, IntroducingTemplateLiterals, RenderingElements, ComponentsAndProps,
+
+function Switcher(){
+    this.enableSubComponents([HelloWorld, IntroducingTemplateLiterals, RenderingElements, ComponentsAndProps,
         StateAndLifecycle, HandlingEvents, ConditionalRendering, ListAndKeys, Forms, LiftingStateUp, CompositionVsInheritance, ThinkingInReact])
     let pages = [
         "<HelloWorld></HelloWorld>",
@@ -30,9 +31,11 @@ export default function Docs() {
         "<CompositionVsInheritance></CompositionVsInheritance>",
         "<ThinkingInReact></ThinkingInReact>",
     ]
-    const [pageIndex, setPageIndex] = this.useState(1)
+    let value = JSON.parse(localStorage.getItem('concept') || '0')
+    const [pageIndex, setPageIndex] = this.useState(value)
     this.beforeAppendChild = () => {
         eventBus.subscribe('Docs-page', (index) => {
+            localStorage.setItem('concept', index)
             setPageIndex(index)
             window.scrollTo({
                 top: 0,
@@ -41,9 +44,13 @@ export default function Docs() {
             });
         })
     }
+    return `${pages[pageIndex]}`;
+}
+export default function Docs() {
+    this.enableSubComponents([Switcher, Aside])
     return `<div class="container" style="padding-top: 56px">
         <div class="row g-5">
-            ${pages[pageIndex]}
+            <Switcher></Switcher>
             <Aside><Aside>
         </div>
     </div>`;

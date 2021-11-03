@@ -1,6 +1,6 @@
-export default function DisplayCode() {
+export default function DisplayCode({full=false, id }) {
     this.beforeAppendChild = (parentNode) => {
-        this.fullScreen = false
+        this.fullScreen = full
         parentNode.querySelector('pre').style.maxHeight = (this.fullScreen) ? 'none' : '200px'
     }
     this.fullScreen = (e) => {
@@ -11,7 +11,7 @@ export default function DisplayCode() {
     
     this.enableEvents('click')
     return `
-    <div class="card mb-4 rounded-3 shadow-sm border-dark k-bg-4">
+    <div ${(id)?`id="${id}"`:''} class="card mb-4 rounded-3 shadow-sm border-dark k-bg-4">
         <div click="fullScreen" class="d-flex align-items-center justify-content-between card-header py-3 text-white bg-dark border-dark" style="cursor: pointer;">
             <h4 class="my-0 fw-normal">Demo</h4>
             <svg with="20" height="20" fill="chartreuse" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 512 512">
