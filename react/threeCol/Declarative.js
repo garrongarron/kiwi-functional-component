@@ -3,10 +3,10 @@ export default function Declarative(){
     <div class="card shadow-sm border-dark">
         <div class="card-body k-bg-4">
             <h3 class="k-color-2 fw-light">Declarative</h3>
-            <p class="card-text text-muted">Kiwi JS makes it painless to create interactive UIs. Design simple
+            <p class="card-text text-light">Kiwi JS makes it painless to create interactive UIs. Design simple
                 views for each state in your application, and React will efficiently update and render just the
                 right components when your data changes.</p>
-            <p class="card-text text-muted">Declarative views make your code more predictable and easier to debug.</p>
+            <p class="card-text text-light">Declarative views make your code more predictable and easier to debug.</p>
         </div>
     </div>
 </div>`

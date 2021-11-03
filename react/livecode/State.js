@@ -1,11 +1,13 @@
 // import getComponent from '../js/FunctionalComponent.js';
-
+let n = null
 function State() {
     let [counter, setCounter] = this.useState(0)
     this.tick = () => {
-        setCounter(counter + 1)
+        (document.contains(this.node))
+            ? setCounter(counter + 1)
+            : clearInterval(n)
     }
-    setTimeout(this.tick, 1000)
+    n = setTimeout(this.tick, 1000)
     return `<div> Counter: ${counter}</div>`
 }
 

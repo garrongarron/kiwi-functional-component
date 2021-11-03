@@ -12,7 +12,6 @@ function Hijo({n}){
         return () => {
             clearInterval(this.n);
             console.log('out from the dom '+n)
-            // this.
         }
     }
     return `<button >Add #1</button>`

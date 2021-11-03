@@ -49,8 +49,13 @@ let publicMethods = {
         return [
             (typeof value == 'undefined') ? value : JSON.parse(JSON.stringify(this.state[n])),
             (newState) => {
+                if (typeof this.state[n] == 'object') {
+                    Object.assign(this.state[n], (typeof newState == 'function') ? newState() : newState)
+                }
                 this.state[n] = newState
+
                 let old = this.node
+                // console.log(this.node, this.node.parentNode);
                 this.node.parentNode.replaceChild(this[EXEC](true), old)//?
                 insideTheDom.check()
             }
@@ -169,7 +174,7 @@ let privateMethods = function () {
         if (this[FIRST_TIME]) {
             this[FIRST_TIME] = false
             let clean = this.beforeAppendChild(node)
-            if(typeof  clean == 'function') {
+            if (typeof clean == 'function') {
                 insideTheDom.add(this, clean)
             }
         }

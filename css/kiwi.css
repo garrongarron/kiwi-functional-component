@@ -66,3 +66,11 @@ animation: rotating 8s linear infinite;
         -webkit-transform: rotate(360deg);
     }
 }
+
+pre > code{
+    font-size:.8rem !important;
+    
+}
+pre{
+    max-height: 200px;
+}

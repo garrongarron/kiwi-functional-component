@@ -1,8 +1,14 @@
+import eventBus from "../src/basic/EventBus.js"
 import Logo from "./Logo.js"
 
 export default function Header() {
-    this.enableSubComponents([Logo])
-    return `
+  this.goto = (e) => {
+    eventBus.dispatch('General-page', 0)
+    e.preventDefault()
+  }
+  this.enableEvents('click')
+  this.enableSubComponents([Logo])
+  return `
 <header class="fixed-top">
   <div class="bg-dark collapse" id="navbarHeader" style="">
     <div class="container">
@@ -24,7 +30,7 @@ export default function Header() {
   </div>
   <div class="navbar navbar-dark bg-dark shadow-sm">
     <div class="container">
-      <a href="#" class="navbar-brand d-flex align-items-center k-color-2">
+      <a href="#"  click="goto" class="navbar-brand d-flex align-items-center k-color-2">
         <Logo></Logo>
         <strong class="ps-2 k-color-2">Kiwi JS</strong>
       </a>
