@@ -3,8 +3,8 @@ import Docs from "./pages/Docs.js"
 import Home from "./pages/Home.js"
 
 export default function Content() {
+    this.enableSubComponents([Home, Docs])
     let value = JSON.parse(localStorage.getItem('page') || '0')
-
     const [pageIndex, setPageIndex] = this.useState(value)
     this.beforeAppendChild = () => {
         eventBus.subscribe('General-page', (index) => {
@@ -22,6 +22,5 @@ export default function Content() {
         "<Home></Home>",
         "<Docs></Docs>",
     ]
-    this.enableSubComponents([Home, Docs])
     return `<div>${pages[pageIndex]}</div>`
 }

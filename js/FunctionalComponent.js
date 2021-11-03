@@ -15,7 +15,12 @@ const insideTheDom = {
     }
 
 }
-
+const primitevesAllowed = 'number string undefined'.split(' ')
+const validatePrimitive = (variable) => {
+    if (!primitevesAllowed.includes(typeof variable)) {
+        throw `Argument is not an string, number or undefined : '${variable}' in primitiveDispatcher() method.`
+    }
+}
 const FIRST_TIME = Symbol('firstTime')
 const STATE_INDEX = Symbol('stateIndex')
 const DEFAUT_STATE_DONE = Symbol('defaultStateDone')
@@ -83,7 +88,25 @@ let publicMethods = {
             callbacks.forEach(c => c())
         }
         return [list, updateList, database]
-    }
+    },
+    variableDispatcher: function (variable) {
+        validatePrimitive(variable)
+        const callbacks = []
+        let valueStored = variable
+        const store = {
+            get value() { return valueStored },
+            subscribe: function (callback) {
+                callbacks.push(callback)
+            },
+        }
+        let updateStore = (newValue) => {
+            validatePrimitive(newValue)
+            valueStored = newValue
+            callbacks.forEach(c => c())
+        }
+        return [store, updateStore, valueStored]
+    },
+
 }
 let privateMethods = function () {
     this[FIRST_TIME] = true
