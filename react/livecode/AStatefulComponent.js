@@ -8,7 +8,7 @@ export default function AStatefulComponent(){
         let data = await fetch('react/livecode/State.js')
         data = await data.text()
         code.textContent = data.replaceAll('// ', '').split('\n').filter((line, lineNumber)=>{
-            return ![0, 1, 10, 11, 12, 13].includes(lineNumber)
+            return ![].includes(lineNumber)
         }).join('\n')
         // Prism.highlightAll();
         let component = getComponent(State )

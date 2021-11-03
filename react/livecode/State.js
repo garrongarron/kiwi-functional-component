@@ -10,7 +10,6 @@ function State() {
     n = setTimeout(this.tick, 1000)
     return `<div> Counter: ${counter}</div>`
 }
-
 // let component = getComponent(State)
 // component.kiwiSelector('body')
 export default State
