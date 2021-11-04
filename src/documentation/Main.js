@@ -5,7 +5,7 @@ import Step, {content} from "./Step.js";
 
 export default function main() {
   this.enableEvents('click');
-  this.enableSubComponents([Step, content])
+  this.enableSubComponents({Step, content})
   let titles = Object.keys(database)
   this.changeAtiveTab = changeAtiveTab
   return `<div class="flex flex-wrap pb-60" id="tabs-id" style="min-height:75vh;">

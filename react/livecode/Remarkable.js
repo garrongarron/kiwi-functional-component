@@ -1,4 +1,4 @@
-import '../../js/Remarcable.js'
+// import '../../js/Remarcable.js'
 
 function Output({ variable }) {
     let [text, setText] = this.useState(variable.value)
@@ -21,7 +21,7 @@ export default function Remarkable() {
     this.handleChange = (e) => {
         setVariable(e.target.value)
     }
-    this.enableSubComponents([Output])
+    this.enableSubComponents({Output})
     this.variableProvider = () => {
         return variable
     }

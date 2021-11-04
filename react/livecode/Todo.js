@@ -25,7 +25,7 @@ function button({ list }) {
 
 // layout
 export default function Todo() {
-    this.enableSubComponents([TodoList, button])
+    this.enableSubComponents({TodoList, button})
     const [list, setList, array] =
         this.arrayDispatcher(['default value'])
     this.handleChange = function (e) {

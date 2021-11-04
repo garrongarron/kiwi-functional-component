@@ -7,9 +7,9 @@ import Section from "../Section.js"
 import ThreeColumns from "../threeCol/ThreeColumns.js"
 
 export default function Home(){
-    this.enableSubComponents([Section, ThreeColumns, 
+    this.enableSubComponents({Section, ThreeColumns, 
         ASimpleComponent, AStatefulComponent, AnApplication,AComponentUsingExternalPlugins,
-        Pricing])
+        Pricing})
     return `<main>
     <Section></Section>
     <ThreeColumns></ThreeColumns>

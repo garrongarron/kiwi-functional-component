@@ -7,7 +7,7 @@ export default function Header() {
     e.preventDefault()
   }
   this.enableEvents('click')
-  this.enableSubComponents([Logo])
+  this.enableSubComponents({Logo})
   return `
 <header class="fixed-top">
   <div class="bg-dark collapse" id="navbarHeader" style="">

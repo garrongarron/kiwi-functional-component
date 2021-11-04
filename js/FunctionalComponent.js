@@ -38,7 +38,7 @@ let publicMethods = {
     prop: {},
     noProp: ["beforeAppendChild", "prop", "enableSubComponents", "enableEvents", "kiwiSelector", "useState", "noProp"],
     enableSubComponents: function (params) {
-        this[SUB_COMPONENTS] = (Array.isArray(params)) ? params : [params]
+        this[SUB_COMPONENTS] = params
     },
     enableEvents: function (params) {
         this[LISTENERS] = (Array.isArray(params)) ? params : [params]
@@ -133,8 +133,9 @@ let privateMethods = function () {
         return prop
     }
     this[ADD_CHILD] = function (parent) {
-        this[SUB_COMPONENTS].map(subComponent => {
-            let nodeList = parent.querySelectorAll(subComponent.name.toLowerCase())
+        Object.keys(this[SUB_COMPONENTS]).map(name => {
+            let subComponent = this[SUB_COMPONENTS][name]
+            let nodeList = parent.querySelectorAll(name.toLowerCase())
             this[CHILDREN] = this[CHILDREN] || []
             this[CHILDREN].forEach(c => { c.free = true })
             for (let index = 0; index < nodeList.length; index++) {
@@ -145,7 +146,7 @@ let privateMethods = function () {
                 let fromCache = false
                 for (j = 0; j < this[CHILDREN].length; j++) {
                     const c = this[CHILDREN][j];
-                    if (c.instanceComponet.constructor.name != subComponent.name) continue;
+                    if (c.instanceComponet.constructor.name != name) continue;
                     if (!c.free) continue;
                     instanceCached = c.instanceComponet
                     fromCache = true

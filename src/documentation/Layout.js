@@ -5,7 +5,7 @@ import nav from "./Nav.js"
 
 export default function App() {
     if (arguments[1]) return
-    this.enableSubComponents([nav, main, footer])
+    this.enableSubComponents({nav, main, footer})
     return `
     <div >
         <nav></nav>

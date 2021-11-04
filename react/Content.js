@@ -3,7 +3,7 @@ import Docs from "./pages/Docs.js"
 import Home from "./pages/Home.js"
 
 export default function Content() {
-    this.enableSubComponents([Home, Docs])
+    this.enableSubComponents({Home, Docs})
     let value = JSON.parse(localStorage.getItem('page') || '0')
     const [pageIndex, setPageIndex] = this.useState(value)
     this.beforeAppendChild = () => {

@@ -4,7 +4,7 @@ import Content from "./Content.js";
 
 
 export default function Layout(){
-    this.enableSubComponents([header, Footer, Content])
+    this.enableSubComponents({header, Footer, Content})
     
     return `<div class="-k-bg-3">
         <header></header>

@@ -4,7 +4,7 @@ import LearnOnce from "./LearnOnce.js"
 
 export default function ThreeColumns() {
     
-    this.enableSubComponents([Declarative, ComponentBased, LearnOnce])
+    this.enableSubComponents({Declarative, ComponentBased, LearnOnce})
     return `
 <div class="album py-5 ">
     <div class="container">

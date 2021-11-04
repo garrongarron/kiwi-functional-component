@@ -8,7 +8,7 @@ export default function ASimpleComponent() {
         code.textContent = data
         // Prism.highlightAll();
     }
-    this.enableSubComponents([DisplayCode])
+    this.enableSubComponents({DisplayCode})
     return `
     <div class="album pt-5">
         <div class="container">

@@ -1,11 +1,11 @@
 import getComponent from './js/FunctionalComponent.js';
+import Bar from './test/Bar.js';
 
 export default function Stringify() {
-    const user = {
-        firstName: 'Jordan',
-        lastName: 'Walke'
-    };
-    return `<h1 user='${JSON.stringify(user)}'>${user.firstName}</h1>`
+    this.enableSubComponents({Bar})
+    return `<h1>
+    <Bar></Bar>
+</h1>`
 }
 
 let component = getComponent(Stringify)
@@ -15,4 +15,3 @@ let userDeserialized = JSON.parse(
     document.querySelector('h1')
         .getAttribute('user')
 )
-console.log(userDeserialized);

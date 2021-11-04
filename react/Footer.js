@@ -2,7 +2,7 @@ import Logo from "./Logo.js"
 
 export default function Footer(){
     let links = `Installation Main Concepts Advanced Guides API_Reference Hooks Testing Contributing FAQ`.split(' ')
-    this.enableSubComponents([Logo])
+    this.enableSubComponents({Logo})
     return `
 <div class="container-fluid bg-dark text-light">
     <div class="container text-muted">

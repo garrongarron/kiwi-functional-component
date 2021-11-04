@@ -10,7 +10,7 @@ export default function Forms(){
         })
         Prism.highlightAll();
     }
-    this.enableSubComponents([DisplayCode])
+    this.enableSubComponents({DisplayCode})
     return `<div class="col-md-8" style="padding-top: 2rem; margin-bottom: 2rem" >
     <h2 class="pb-4 mb-4 fst-italic border-bottom">
     Forms

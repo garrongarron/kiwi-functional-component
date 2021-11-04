@@ -15,7 +15,7 @@ export default function AnApplication(){
         component.kiwiSelector('.todo-app')
         this.fullScreen = false
     }
-    this.enableSubComponents([DisplayCode])
+    this.enableSubComponents({DisplayCode})
     return `
     <div class="album pt-5">
         <div class="container">

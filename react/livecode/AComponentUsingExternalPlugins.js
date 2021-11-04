@@ -12,7 +12,7 @@ export default function AComponentUsingExternalPlugins(){
         let component = getComponent(Remarkable)
         component.kiwiSelector('.demo-external-library')
     }
-    this.enableSubComponents([DisplayCode])
+    this.enableSubComponents({DisplayCode})
     return `
     <div class="album pt-5">
         <div class="container">

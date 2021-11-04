@@ -15,7 +15,7 @@ export default function IntroducingTemplateLiterals() {
     loadSnippets('malicious', 'PreventsInjectionAttacks')
     loadSnippets('stringify', 'Stringify')
   }
-  this.enableSubComponents([DisplayCode])
+  this.enableSubComponents({DisplayCode})
   return `<div class="col-md-8" style="padding-top: 2rem; margin-bottom: 2rem" >
     <h2 class="pb-4 mb-4 fst-italic border-bottom">
     Introducing Template Literals

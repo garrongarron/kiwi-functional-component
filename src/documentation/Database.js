@@ -24,7 +24,7 @@ const database = {
 
     export default function Layout() {
         if (arguments[1]) return
-        this.enableSubComponents([Nav, Main, Footer])
+        this.enableSubComponents({Nav, Main, Footer})
         return \`
         &lt;div &gt;
             &lt;Nav&gt;&lt;/Nav&gt;
@@ -92,7 +92,7 @@ const database = {
 
     export default function AppProperties() \{
         if (arguments[1]) return
-        this.enableSubComponents([Nav])
+        this.enableSubComponents({Nav})
         let data = [
             &#39;Get started&#39;,
             &#39;Documentation&#39;,

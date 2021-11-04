@@ -17,7 +17,7 @@ function Nav({ links , name, data}) {//props as parameters
 
 export default function AppProperties() {
     if (arguments[1]) return
-    this.enableSubComponents([Nav])
+    this.enableSubComponents({Nav})
     let data = [
         'Get started',
         'Documentation',

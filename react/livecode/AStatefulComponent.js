@@ -15,7 +15,7 @@ export default function AStatefulComponent(){
         component.kiwiSelector('.a-stateful-component')
         
     }
-    this.enableSubComponents([DisplayCode])
+    this.enableSubComponents({DisplayCode})
     return `
     <div class="album pt-5">
         <div class="container">

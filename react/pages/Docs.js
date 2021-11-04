@@ -15,8 +15,8 @@ import ThinkingInReact from "../docs/ThinkingInReact.js";
 
 
 function Switcher(){
-    this.enableSubComponents([HelloWorld, IntroducingTemplateLiterals, RenderingElements, ComponentsAndProps,
-        StateAndLifecycle, HandlingEvents, ConditionalRendering, ListAndKeys, Forms, LiftingStateUp, CompositionVsInheritance, ThinkingInReact])
+    this.enableSubComponents({HelloWorld, IntroducingTemplateLiterals, RenderingElements, ComponentsAndProps,
+        StateAndLifecycle, HandlingEvents, ConditionalRendering, ListAndKeys, Forms, LiftingStateUp, CompositionVsInheritance, ThinkingInReact})
     let pages = [
         "<HelloWorld></HelloWorld>",
         "<IntroducingTemplateLiterals></IntroducingTemplateLiterals>",
@@ -47,7 +47,7 @@ function Switcher(){
     return `${pages[pageIndex]}`;
 }
 export default function Docs() {
-    this.enableSubComponents([Switcher, Aside])
+    this.enableSubComponents({Switcher, Aside})
     return `<div class="container" style="padding-top: 56px">
         <div class="row g-5">
             <Switcher></Switcher>
