@@ -12,7 +12,6 @@ export default function Aside() {
     })
     e.currentTarget.classList.remove('k-color-3')
     e.currentTarget.classList.add('k-color-2')
-    console.log(e.target);
   }
   this.enableEvents(['click'])
 

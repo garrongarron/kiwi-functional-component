@@ -43,7 +43,7 @@ export default function Docs() {
     return `<div class="container" style="padding-top: 56px">
         <div class="row g-5">
             <Switcher></Switcher>
-            <Aside><Aside>
+            <Aside></Aside>
         </div>
     </div>`;
 }

@@ -22,7 +22,7 @@ export default function StateAndLifecycle(){
 
         <DisplayCode></DisplayCode>
       <p>This funny tag syntax is a string similar to HTML sintax.</p>
-      <hr>
+      <hr />
       <h2>Template Literals</h2>
       <p>It is a single string, and it is native in JavaScript. We recommend using it with React to describe what the UI should look like. It may remind you of a template language, but it comes with the full power of JavaScript.</p>
       <p>This string will became in HTML “elements”. We will explore rendering them to the DOM in the next section. Below, you can find the basicsconcepts necessary to get you started.</p>

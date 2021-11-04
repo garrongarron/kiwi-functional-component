@@ -1,4 +1,4 @@
-export default function DisplayCode({ full = false, id, type = "javascript", filename = null }) {
+export default function DisplayCode({ full = false, id, type = "javascript", filename = null, content = null }) {
     this.beforeAppendChild = (parentNode) => {
         this.fullScreen = full
         parentNode.querySelector('pre').style.maxHeight = (this.fullScreen) ? 'none' : '200px'
@@ -24,7 +24,7 @@ export default function DisplayCode({ full = false, id, type = "javascript", fil
             </svg>
         </div>
         <div class="card-body text-white">
-            <pre class="scroll-bar" style="overflow-y:scroll; max-height: 200px; transition: max-height 0.5s ease-out;"><code class="language-${(type) ? type : 'javascript'}" ></code></pre>
+            <pre class="scroll-bar" style="overflow-y:scroll; max-height: 200px; transition: max-height 0.5s ease-out;"><code class="language-${(type) ? type : 'javascript'}" >${(content)?content:''}</code></pre>
         </div>
     </div>
     `

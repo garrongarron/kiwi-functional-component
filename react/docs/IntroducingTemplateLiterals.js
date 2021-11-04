@@ -52,7 +52,10 @@ export default function IntroducingTemplateLiterals() {
       <blockquote class="blockquote">
         <p>Note</p>
       </blockquote>
-      <p>If you want to sent a JSON string you must to use ingle quotes to avoid conficts with the double quottes from the JSON format.</p>   
+      <p>If you want to sent a JSON string you must to use single quotes to avoid conflicts with the double quotes from the JSON format.</p>   
       <DisplayCode full="true" id="stringify"></DisplayCode>
+      <p>As you can see, we could serialize and deserialize an Object using single quotes into the value of the attribute of the node.</p>
+      <p>Naturally, the deserialize object is not the same that was serialized, but in the following lessons we learn how to receive the same object  working with properties in a particular way.</p>
+
   </div>`
 }

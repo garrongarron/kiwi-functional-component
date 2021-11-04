@@ -3,7 +3,7 @@ import DisplayCode from "../livecode/DisplayCode.js"
 export default function HelloWorld() {
   this.beforeAppendChild = async (parentNode) => {
     let node = parentNode.children[0]
-    
+
     {
       let code = node.querySelector('#hello-world code')
       let data = await fetch('react/docs/snippets/HelloWorld.js')
@@ -29,11 +29,13 @@ export default function HelloWorld() {
     <article class="blog-post">
       <h3 class="blog-post-title">The smallest Kiwi JS example</h3>
       <p class="blog-post-meta">January 1, 2021 by <a href="#">Mark</a></p>
-      <p>The fist step to try this library is download the libreary from <a href="#">here</a>. Then, in a particular folder create the following index.html.</p>
+      <p>The fist step to try this library is create a specific foolder for the project. 
+        There create the following <strong>index.html</strong> file.</p>
         <DisplayCode filename="index.html" full="true" id="index" type="html"  ></DisplayCode>
-      <p>After that write the following EcmaScript 6.</p>
+      <p> Then you can create a <strong>js</strong> sub-folder to place the <strong>FunctionalComponent.js</strong> library that you can download from <a href="#">here</a>. </p>
+      <p>After that, write the following EcmaScript 6 module into a <strong>src</strong> sub-folder named <strong>HelloWorld.js</strong>.</p>
         <DisplayCode filename="src/HelloWorld.js" full="true" id="hello-world" type="javascript"></DisplayCode>
-      <p>It displays a heading saying “Hello, Taylor!” on the page.</p>
+      <p>It displays a heading saying “Hello, World!” on the page.</p>
         
       <hr>
       <h2>How to Read This Guide</h2>

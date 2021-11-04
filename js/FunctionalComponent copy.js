@@ -45,18 +45,13 @@ let publicMethods = {
         this[LISTENERS] = (Array.isArray(params)) ? params : [params]
     },
     kiwiSelector: function (selector) {
-        let root = this[EXEC]()
-        document.querySelector(selector).appendChild(root)
+        document.querySelector(selector).appendChild(this[EXEC]())
     },
-    useState: function (val) {
-        let value = val
+    useState: function (value) {
         if (!this.state) this.state = {}
         let n = this[STATE_INDEX]++
         if (!this[DEFAUT_STATE_DONE])
             this.state[n] = value
-        else {
-            value = this.state[n]
-        }
         return [
             (typeof value == 'undefined') ? value : JSON.parse(JSON.stringify(this.state[n])),
             (newState) => {
@@ -64,17 +59,14 @@ let publicMethods = {
                     Object.assign(this.state[n], (typeof newState == 'function') ? newState() : newState)
                 }
                 this.state[n] = newState
+                console.log('nuevo estado', this.state[n]);
                 let old = this.node
-                let parent = this.node.parentNode
-                this[SETING_LISTENER](this.node.parentNode, true)
-                let newObject = this[EXEC](true)
-                let refresh = this[REFRESH](old, newObject)
-                if (refresh) {
-                    old.parentNode.replaceChild(newObject, old)//?
-                } else {
+                let newNode = this[EXEC](true)
+                let flag = this[REFRESH](old, newNode)
+                if (flag) {
                     this.node = old
-                    this[SETING_LISTENER](parent)
                 }
+                if (!flag) old.parentNode.replaceChild(newNode, old)//?
                 insideTheDom.check()
             }
         ]
@@ -96,7 +88,6 @@ let publicMethods = {
             }
         }
         let updateList = (newDatabase) => {
-            console.log(newDatabase);
             database = newDatabase
             callbacks.forEach(c => c())
         }
@@ -186,76 +177,68 @@ let privateMethods = function () {
     }
     this[SUB_COMPONENTS] = []
     this[LISTENERS] = []
-    this[SETING_LISTENER] = function (parent, remove = null) {
+    this[SETING_LISTENER] = function (parent) {
         this[LISTENERS].map(selector => {
             let nodeList = parent.querySelectorAll('[' + selector + ']')
             for (let index = 0; index < nodeList.length; index++) {
                 const node = nodeList[index];
                 let method = node.getAttribute(selector)
                 if (!method) throw "There is no attribute '" + selector + "' value on:\n\n" + node.outerHTML
-                if (remove) {
-                    node.removeEventListener(selector, this[method])
-                } else {
-                    node.addEventListener(selector, this[method])
-                }
-
+                node.addEventListener(selector, this[method].bind(this))
             }
         });
     }
     this[ORIGINAL_MAP] = Array.prototype.toString
     this[CUSTOM_MAP] = function () { return this.join(' ') }
     this[REFRESH] = function (old, newNode) {
-        let refresh = true
+        let flag = true
         function process(n1, n2) {
             if (n1.lenght == n2.lenght) {
                 n1.forEach((text, index) => {
+                    // console.log(n2[index]);
                     if (text.textContent != n2[index].textContent) {
                         if (text.nodeName != n2[index].nodeName) return
                         text.textContent = n2[index].textContent
-                        refresh = false
+                        flag = true
                     }
                 })
             }
         }
-        let oldNodes = old.querySelectorAll('*')
-        let newNodes = newNode.querySelectorAll('*')
-        if (oldNodes.length != newNode.querySelectorAll('*').length) {
-            return true
-        }
-        try {
-            oldNodes.forEach((node, index) => {
-                let generated = newNodes[index]
-                let tmp = {}
-                for (const attr of node.attributes) { 
-                    tmp[attr.name] = attr.value
-                }
-                for (const attr of generated.attributes) { 
-                    tmp[attr.name] = attr.value
-                }
-                Object.keys(tmp).forEach((key) => {
-                    if(generated.getAttribute(key)==null){
-                        node.removeAttribute(key)
-                    } else{
-                        if(node.getAttribute(key)!=generated.getAttribute(key)){
-                            node.setAttribute(key, generated.getAttribute(key))
-                        }
+        old.querySelectorAll('*').forEach((node, index) => {
+            // console.log(node.attributes, newNode.querySelectorAll('*')[index].attributes);
+            // node.attributes, newNode.querySelectorAll('*')[index].attributes
+            let generated = newNode.querySelectorAll('*')[index]
+            let tmp = {}
+            for (const attr of node.attributes) { 
+                tmp[attr.name] = attr.value
+            }
+            for (const attr of generated.attributes) { 
+                tmp[attr.name] = attr.value
+            }
+            
+            Object.keys(tmp).forEach((key) => {
+                //delete that is missing
+                if(generated.getAttribute(key)==null){
+                    node.removeAttribute(key)
+                } else{
+                    if(node.getAttribute(key)!=generated.getAttribute(key)){
+                        node.setAttribute(key, generated.getAttribute(key))
                     }
-                })
-                let q1 = node.childNodes
-                let q2 = generated.childNodes
-                process(q1, q2);
-            });
-        } catch (error) {
-            console.error("SOMETHING WRONG: ", error);
-        }
-        return refresh
+                }
+            })
+
+            let q1 = node.childNodes
+            let q2 = generated.childNodes
+            process(q1, q2);
+        });
+        return flag
     }
     this[EXEC] = function (again) {
         //@TODO AVOID TAG NO CLOSED
-        var node = document.createElement('section');
+        let node = document.createElement('section');
         this[STATE_INDEX] = 0
         Array.prototype.toString = this[CUSTOM_MAP]
-        let string = this.constructor(this.prop) // constructor as a second time
+        let string = this.constructor(this.prop)
         Array.prototype.toString = this[ORIGINAL_MAP]
         this[DEFAUT_STATE_DONE] = true
         node.innerHTML = string

@@ -1,7 +1,7 @@
 import getComponent from '../js/FunctionalComponent.js';
 
 function HelloWorld() {
-    return `<div>Hello World</div>`
+    return `<h1>Hello, World</h1>`
 }
 
 let component = getComponent(HelloWorld)

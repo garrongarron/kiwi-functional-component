@@ -1,17 +1,13 @@
 import getComponent from './js/FunctionalComponent.js';
 import Bar from './test/Bar.js';
 
-export default function Stringify() {
-    this.enableSubComponents({Bar})
-    return `<h1>
-    <Bar></Bar>
-</h1>`
+function Stringify() {
+    let [counter, setCounter] = this.useState(0)
+    this.timer = () => {
+        setCounter(counter+1)
+    }
+    this.enableEvents(['click'])
+    return `<div><div><h2 click="timer" ${(counter%2==0)?'class="aasd"':''} >It is ${counter}.</h2></div></div>`
 }
+getComponent(Stringify).kiwiSelector('body')
 
-let component = getComponent(Stringify)
-component.kiwiSelector('body')
-
-let userDeserialized = JSON.parse(
-    document.querySelector('h1')
-        .getAttribute('user')
-)
