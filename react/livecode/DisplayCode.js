@@ -1,4 +1,4 @@
-export default function DisplayCode({full=false, id }) {
+export default function DisplayCode({ full = false, id, type = "javascript", filename = null }) {
     this.beforeAppendChild = (parentNode) => {
         this.fullScreen = full
         parentNode.querySelector('pre').style.maxHeight = (this.fullScreen) ? 'none' : '200px'
@@ -6,14 +6,14 @@ export default function DisplayCode({full=false, id }) {
     this.fullScreen = (e) => {
         this.fullScreen = !this.fullScreen
         e.currentTarget.parentNode.querySelector('pre').style.maxHeight = (this.fullScreen) ? 'none' : '200px'
-        e.currentTarget.querySelector('svg').setAttribute('fill',(!this.fullScreen)?'chartreuse':'gray')
+        e.currentTarget.querySelector('svg').setAttribute('fill', (!this.fullScreen) ? 'chartreuse' : 'gray')
     }
-    
+
     this.enableEvents('click')
     return `
-    <div ${(id)?`id="${id}"`:''} class="card mb-4 rounded-3 shadow-sm border-dark k-bg-4">
+    <div ${(id) ? `id="${id}"` : ''} class="card mb-4 rounded-3 shadow-sm border-dark k-bg-4">
         <div click="fullScreen" class="d-flex align-items-center justify-content-between card-header py-3 text-white bg-dark border-dark" style="cursor: pointer;">
-            <h4 class="my-0 fw-normal">Demo</h4>
+            <h4 class="my-0 fw-normal">${(filename) ?filename:'Demo'}</h4>
             <svg with="20" height="20" fill="chartreuse" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 512 512">
                 <g>
                     <g>
@@ -24,7 +24,7 @@ export default function DisplayCode({full=false, id }) {
             </svg>
         </div>
         <div class="card-body text-white">
-            <pre style="overflow-y:scroll; max-height: 200px; transition: max-height 0.5s ease-out;"><code class="language-javascript" ></code></pre>
+            <pre class="scroll-bar" style="overflow-y:scroll; max-height: 200px; transition: max-height 0.5s ease-out;"><code class="language-${(type) ? type : 'javascript'}" ></code></pre>
         </div>
     </div>
     `

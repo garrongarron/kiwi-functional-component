@@ -1,16 +1,27 @@
 import DisplayCode from "../livecode/DisplayCode.js"
 
-export default function HelloWorld(){
-    this.beforeAppendChild = async (parentNode) => {
-        let code = parentNode.querySelector('code')
-        let data = await fetch('react/docs/snippets/HelloWorld.js')
-        data = await data.text()
-        code.textContent = data
-        Prism.highlightAll();
-    }
+export default function HelloWorld() {
+  this.beforeAppendChild = async (parentNode) => {
+    let node = parentNode.children[0]
     
-    this.enableSubComponents({DisplayCode})
-    return `<div class="col-md-8" style="padding-top: 2rem; margin-bottom: 2rem" >
+    {
+      let code = node.querySelector('#hello-world code')
+      let data = await fetch('react/docs/snippets/HelloWorld.js')
+      data = await data.text()
+      code.textContent = data
+      Prism.highlightAll();
+    }
+    {
+      let code = node.querySelector('#index code')
+      let data = await fetch('react/docs/snippets/Model.html.txt')
+      data = await data.text()
+      code.textContent = data
+      Prism.highlightAll();
+    }
+  }
+
+  this.enableSubComponents({ DisplayCode })
+  return `<div class="col-md-8" style="padding-top: 2rem; margin-bottom: 2rem" >
     <h2 class="pb-4 mb-4 fst-italic border-bottom">
     Hello World
     </h2>
@@ -18,9 +29,12 @@ export default function HelloWorld(){
     <article class="blog-post">
       <h3 class="blog-post-title">The smallest Kiwi JS example</h3>
       <p class="blog-post-meta">January 1, 2021 by <a href="#">Mark</a></p>
-
-        <DisplayCode></DisplayCode>
+      <p>The fist step to try this library is download the libreary from <a href="#">here</a>. Then, in a particular folder create the following index.html.</p>
+        <DisplayCode filename="index.html" full="true" id="index" type="html"  ></DisplayCode>
+      <p>After that write the following EcmaScript 6.</p>
+        <DisplayCode filename="src/HelloWorld.js" full="true" id="hello-world" type="javascript"></DisplayCode>
       <p>It displays a heading saying “Hello, Taylor!” on the page.</p>
+        
       <hr>
       <h2>How to Read This Guide</h2>
       <p>In this guide, we will examine the building blocks of Kiwi JS apps: elements and components. Once you master them, you can create complex apps from small reusable pieces.</p>

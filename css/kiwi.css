@@ -74,3 +74,17 @@ pre > code{
 pre{
     max-height: 200px;
 }
+
+/* scroll bar */
+
+.scroll-bar::-webkit-scrollbar{
+    width: 7px;
+}
+
+/* .scroll-bar::-webkit-scrollbar-thumb{
+    background-color: var(--k-color-2);
+} */
+.scroll-bar::-webkit-scrollbar-thumb{
+    background-color: var(--k-color-2);
+    border-radius: 10px;
+}

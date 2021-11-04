@@ -44,7 +44,8 @@ let publicMethods = {
         this[LISTENERS] = (Array.isArray(params)) ? params : [params]
     },
     kiwiSelector: function (selector) {
-        document.querySelector(selector).appendChild(this[EXEC]())
+        let root = this[EXEC]()
+        document.querySelector(selector).appendChild(root)
     },
     useState: function (value) {
         if (!this.state) this.state = {}
@@ -163,8 +164,10 @@ let privateMethods = function () {
                         instanceComponet
                     }
                 }
+                instanceComponet.prop = {}
                 Object.assign(instanceComponet.prop, prop)
                 let newNode = instanceComponet[EXEC]()
+                
                 node.parentNode.replaceChild(newNode, node)
             }
         })
@@ -186,6 +189,7 @@ let privateMethods = function () {
     this[ORIGINAL_MAP] = Array.prototype.toString
     this[CUSTOM_MAP] = function () { return this.join(' ') }
     this[EXEC] = function (again) {
+        //@TODO AVOID TAG NO CLOSED
         var node = document.createElement('section');
         this[STATE_INDEX] = 0
         Array.prototype.toString = this[CUSTOM_MAP]

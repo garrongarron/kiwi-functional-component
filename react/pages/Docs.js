@@ -3,6 +3,7 @@ import Aside from "../docs/Aside.js";
 import ComponentsAndProps from "../docs/ComponentsAndProps.js";
 import CompositionVsInheritance from "../docs/CompositionVsInheritance.js";
 import ConditionalRendering from "../docs/ConditionalRendering.js";
+import documentationList from "../docs/DocumentationList.js";
 import Forms from "../docs/Forms.js";
 import HandlingEvents from "../docs/HandlingEvents.js";
 import HelloWorld from "../docs/HelloWorld.js";
@@ -17,21 +18,12 @@ import ThinkingInReact from "../docs/ThinkingInReact.js";
 function Switcher(){
     this.enableSubComponents({HelloWorld, IntroducingTemplateLiterals, RenderingElements, ComponentsAndProps,
         StateAndLifecycle, HandlingEvents, ConditionalRendering, ListAndKeys, Forms, LiftingStateUp, CompositionVsInheritance, ThinkingInReact})
-    let pages = [
-        "<HelloWorld></HelloWorld>",
-        "<IntroducingTemplateLiterals></IntroducingTemplateLiterals>",
-        "<RenderingElements></RenderingElements>",
-        "<ComponentsAndProps></ComponentsAndProps>",
-        "<StateAndLifecycle></StateAndLifecycle>",
-        "<HandlingEvents></HandlingEvents>",
-        "<ConditionalRendering></ConditionalRendering>",
-        "<ListAndKeys></ListAndKeys>",
-        "<Forms></Forms>",
-        "<LiftingStateUp></LiftingStateUp>",
-        "<CompositionVsInheritance></CompositionVsInheritance>",
-        "<ThinkingInReact></ThinkingInReact>",
-    ]
-    let value = JSON.parse(localStorage.getItem('concept') || '0')
+        
+    let pages = {}
+    Object.keys(documentationList).forEach(key => {
+        pages[key] = `<${key}></${key}>`
+    })
+    let value = localStorage.getItem('concept') || 'HelloWorld'
     const [pageIndex, setPageIndex] = this.useState(value)
     this.beforeAppendChild = () => {
         eventBus.subscribe('Docs-page', (index) => {
@@ -43,7 +35,7 @@ function Switcher(){
                 behavior: 'smooth'
             });
         })
-    }
+    } 
     return `${pages[pageIndex]}`;
 }
 export default function Docs() {

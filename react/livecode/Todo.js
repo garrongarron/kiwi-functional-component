@@ -35,14 +35,14 @@ export default function Todo() {
         e.preventDefault()
     }
     this.enableEvents(['submit'])
-    this.list = () => list
+    this.dataProvider = () => list
     return `<div>
     <h3>TODO</h3>
-    <TodoList list="list"></TodoList>
+    <TodoList list="dataProvider"></TodoList>
     <form submit="handleChange" >
         <label for="new-todo">What needs to be done?</label>
         <input id="new-todo" value="">
-        <button list="list"></button>
+        <button list="dataProvider"></button>
     </form>
 </div>`
 }

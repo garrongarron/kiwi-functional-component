@@ -1,27 +1,27 @@
 import eventBus from "../../src/basic/EventBus.js"
+import list from "./DocumentationList.js"
 
 export default function Aside() {
-  let list = 'HelloWorld IntroducingTemplateLiterals RenderingElements ComponentsAndProps StateAndLifecycle HandlingEvents ConditionalRendering ' +
-    'ListAndKeys Forms LiftingStateUp CompositionVsInheritance ThinkingInReact'
-  list = list.split(' ')
   this.goto = (e) => {
-    eventBus.dispatch('Docs-page', e.target.getAttribute('index') * 1)
+    eventBus.dispatch('Docs-page', e.target.getAttribute('index'))
     e.preventDefault()
-    
-    e.target.parentNode.parentNode.querySelectorAll('a').forEach(a=>{
+
+    e.target.parentNode.parentNode.querySelectorAll('a').forEach(a => {
       a.classList.remove('k-color-2')
+      a.classList.add('k-color-3')
     })
-    // e.currentTarget.classList.remove('k-color-2')
+    e.currentTarget.classList.remove('k-color-3')
     e.currentTarget.classList.add('k-color-2')
     console.log(e.target);
   }
   this.enableEvents(['click'])
+
   return `<div class="col-md-4">
     <div class="position-sticky" style="top: 4rem; padding-bottom: 4rem"> 
       <div class="p-4">
         <h4 class="fst-italic">Main concepts</h4>
-        <ol class="list-unstyled mb-0">
-          ${list.map((link, index) => `<li><a href="#"  click="goto" index="${index}">${link}</a></li>`)}
+        <ol class="list-group mb-0">
+          ${Object.keys(list).map((key, index) => `<li><a href="#"  class="k-color-3" click="goto" index="${key}">${list[key]}</a></li>`)}
         </ol>
       </div>
 

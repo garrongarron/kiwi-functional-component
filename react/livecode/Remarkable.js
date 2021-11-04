@@ -1,5 +1,3 @@
-// import '../../js/Remarcable.js'
-
 function Output({ variable }) {
     let [text, setText] = this.useState(variable.value)
     this.beforeAppendChild = () => {
@@ -22,9 +20,7 @@ export default function Remarkable() {
         setVariable(e.target.value)
     }
     this.enableSubComponents({Output})
-    this.variableProvider = () => {
-        return variable
-    }
+    this.variableProvider = () => variable
     return `
         <div class="MarkdownEditor">
             <h3>Input</h3>

@@ -25,7 +25,7 @@ export default function ASimpleComponent() {
                 </div>
                 <!-- left -->
                 <div class="col-lg-6">
-                    <DisplayCode></DisplayCode>
+                    <DisplayCode ></DisplayCode>
                 </div>
                 <!-- demo -->
                 <div class="col-lg-2"> 
