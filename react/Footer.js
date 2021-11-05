@@ -1,7 +1,7 @@
 import Logo from "./Logo.js"
 
 export default function Footer(){
-    let links = `Installation Main Concepts Advanced Guides API_Reference Hooks Testing Contributing FAQ`.split(' ')
+    let links = `Installation Main_Concepts Advanced_Guides API_Reference Hooks Testing Contributing FAQ`.split(' ')
     this.enableSubComponents({Logo})
     return `
 <div class="container-fluid bg-dark text-light">
@@ -19,7 +19,7 @@ export default function Footer(){
                 </div>
             </div>
             <!-- 2 -->
-            <div class="col-lg-3 d-flex align-items-start">
+            <div class="col-lg-3 d-flex align-items-start visually-hidden">
                 <div>
                 <h4 class="fw-bold mb-0 text-muted">Docs</h4>
                 <!-- <p>Paragraph of text beneath the heading to explain the heading.</p> -->
@@ -29,7 +29,7 @@ export default function Footer(){
                 </div>
             </div>
             <!-- 3 -->
-            <div class="col-lg-3 d-flex align-items-start">
+            <div class="col-lg-3 d-flex align-items-start visually-hidden">
                 <div>
                 <h4 class="fw-bold mb-0">Channels</h4>
                 <p>Paragraph of text beneath the heading to explain the heading.</p>

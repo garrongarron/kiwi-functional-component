@@ -5,12 +5,12 @@ const documentationList = {
     "ComponentsAndProps": "Components And Props",
     "StateAndLifecycle": "State And Lifecycle",
     "HandlingEvents": "Handling Events",
-    "ConditionalRendering": "Conditional Rendering",
-    "ListAndKeys": "List And Keys",
-    "Forms": "Forms",
-    "LiftingStateUp": "Lifting State Up",
-    "CompositionVsInheritance": "Composition Vs Inheritance",
-    "ThinkingInReact": "Thinking In React"
+    // "ConditionalRendering": "Conditional Rendering",
+    // "ListAndKeys": "List And Keys",
+    // "Forms": "Forms",
+    // "LiftingStateUp": "Lifting State Up",
+    // "CompositionVsInheritance": "Composition Vs Inheritance",
+    // "ThinkingInReact": "Thinking In React"
   }
 
 

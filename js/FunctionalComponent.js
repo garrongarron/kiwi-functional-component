@@ -267,7 +267,6 @@ let privateMethods = function () {
             })
             final.push(last)
             string = final.join('')
-            console.log(string);
         }
         Array.prototype.toString = this[ORIGINAL_MAP]
         this[DEFAUT_STATE_DONE] = true

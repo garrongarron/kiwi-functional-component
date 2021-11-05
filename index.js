@@ -9,13 +9,16 @@ function Calculator({ name = 'Mate', calc }) {
 }
 function Main() {
     this.enableSubComponents({ Calculator })
-    this.objectSender = () => {
-        return {
-            sum: (a, b) => a + b
-        }
-    }
+    //ok
+    this.nameProvider = () => 'Hello'
+    //ok
+    this.nameProvider = function(){ return 'Hello' }
+    //bad
+    this.nameProvider(){ return 'Hello' }
+    
     return `<div>
-        <Calculator name="Mike" />
+        <Calculator name="Sara" />
+        <Calculator name="Cahal" />
         <Calculator calc="objectSender" />
     </div>`
 }
