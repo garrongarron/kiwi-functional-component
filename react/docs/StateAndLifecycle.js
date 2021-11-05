@@ -28,7 +28,7 @@ export default function StateAndLifecycle(){
 
     <article class="blog-post">
       <h3 class="blog-post-title">State is not touched.</h3>
-      <p class="blog-post-meta">January 1, 2021 by <a href="#">Mark</a></p>
+      <p class="blog-post-meta">November 4, 2021 by <a href="https://twitter.com/samugarrondev" target="_blank" rel="noopener noreferrer">@samugarrondev</a></p>
       <p>In Kiwi Js the we can not acces straing to the state of the components. We can handle it by a a special method called <strong>this.useState()</strong>.</p>
       <p>This method return an array with thwo elements. The first one is a shallow copy of one element of the state and se second element is a setter method.</p>
         <DisplayCode content="useStateExample"></DisplayCode>

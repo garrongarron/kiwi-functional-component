@@ -10,8 +10,8 @@ export default function Footer(){
             <!-- 1 -->
             <div class="col-lg-6 d-flex align-items-start">
                 <div>
-                    <h4 class="fw-bold mb-0">Open Source</h4>
-                    <p>Copyright © 2021 SamuGarron Dev.</p>
+                    <h4 class="fw-bold mb-0">Kiwi JS</h4>
+                    <p> 2021 by <a class="k-color-1 text-decoration-none" href="https://twitter.com/samugarrondev" target="_blank" rel="noopener noreferrer">@samugarrondev</a></p>
                     <center>
                         <Logo size="150"></Logo>
                     </center>

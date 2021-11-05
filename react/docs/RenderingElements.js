@@ -44,7 +44,7 @@ getComponent(FragmentedUpdate).kiwiSelector(&#39;body&#39;)`
 
     <article class="blog-post">
       <h3 class="blog-post-title">Rendering an Element into the DOM</h3>
-      <p class="blog-post-meta">January 1, 2021 by <a href="#">Mark</a></p>
+      <p class="blog-post-meta">November 4, 2021 by <a href="https://twitter.com/samugarrondev" target="_blank" rel="noopener noreferrer">@samugarrondev</a></p>
 
         <DisplayCode full="true" id="hello-message" content="helloMessage"></DisplayCode>
       <p>Kiwi JS allows you create any regular function as a component, just using the wrapper <strong>getComponent()</strong> .</p>

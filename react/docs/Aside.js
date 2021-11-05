@@ -26,7 +26,8 @@ export default function Aside() {
 
       <div class="p-4 mb-8 bg-dark rounded text-light" >
         <h4 class="fst-italic">About</h4>
-        <p class="mb-0">Customize this section to tell your visitors a little bit about your publication, writers, content, or something else entirely. Totally up to you.</p>
+        <p class="mb-0">This library was made after research the React library features and pretends reduce the boilerplate and improve the developer experience. It is native, small, and fast... There is no lighter at the moment but the "string-highlight
+" extension by Jenkey2011 could help to highlight the Template Literals in Visual Studio Code.</p>
       </div>
     </div>
   </div>`

@@ -28,7 +28,7 @@ export default function HelloWorld() {
 
     <article class="blog-post">
       <h3 class="blog-post-title">The smallest Kiwi JS example</h3>
-      <p class="blog-post-meta">January 1, 2021 by <a href="#">Mark</a></p>
+      <p class="blog-post-meta">November 4, 2021 by <a href="https://twitter.com/samugarrondev" target="_blank" rel="noopener noreferrer">@samugarrondev</a></p>
       <p>The fist step to try this library is create a specific foolder for the project. 
         There create the following <strong>index.html</strong> file.</p>
         <DisplayCode filename="index.html" full="true" id="index" type="html"  ></DisplayCode>

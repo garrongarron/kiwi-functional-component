@@ -18,7 +18,7 @@ export default function ConditionalRendering(){
 
     <article class="blog-post">
       <h3 class="blog-post-title">Consider this variable declaration:</h3>
-      <p class="blog-post-meta">January 1, 2021 by <a href="#">Mark</a></p>
+      <p class="blog-post-meta">November 4, 2021 by <a href="https://twitter.com/samugarrondev" target="_blank" rel="noopener noreferrer">@samugarrondev</a></p>
 
         <DisplayCode></DisplayCode>
       <p>This funny tag syntax is a string similar to HTML sintax.</p>

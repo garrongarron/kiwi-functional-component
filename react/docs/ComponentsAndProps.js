@@ -86,8 +86,8 @@ getComponent(Main).kiwiSelector(&#39;body&#39;)`
     </h2>
 
     <article class="blog-post">
-      <h3 class="blog-post-title">Consider this variable declaration:</h3>
-      <p class="blog-post-meta">January 1, 2021 by <a href="#">Mark</a></p>
+      <h3 class="blog-post-title">Consider this variable declaration:</h3> 
+      <p class="blog-post-meta">November 4, 2021 by <a href="https://twitter.com/samugarrondev" target="_blank" rel="noopener noreferrer"> @samugarrondev</a></p>
       <p>Components let you split the UI into independent, reusable pieces, and think about each piece in isolation. This page provides an introduction to the idea of components.</p>
       <p>Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return React elements describing what should appear on the screen.<p>
       <hr>

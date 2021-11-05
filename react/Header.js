@@ -15,14 +15,14 @@ export default function Header() {
       <div class="row">
         <div class="col-sm-8 col-md-7 py-4">
           <h4 class="text-white">What is this?</h4>
-          <p class="text-muted"> This is the official web site of the Kiwi JS library (react clone, but better).</p>
+          <p class="text-muted"> This is the official web site of the Kiwi JS library (React clone, but better XD).</p>
         </div>
         <div class="col-sm-4 offset-md-1 py-4">
           <h4 class="text-white">Contact</h4>
           <ul class="list-unstyled">
-            <li><a href="#" class="text-white">Follow on Twitter (pending)</a></li>
-            <li><a href="#" class="text-white">Like on Facebook (pending)</a></li>
-            <li><a href="#" class="text-white">Email me (pending)</a></li>
+            <li><a class="text-white" href="https://twitter.com/samugarrondev" target="_blank" rel="noopener noreferrer">Follow on Twitter</a></li>
+            <!-- <li><a href="#" class="text-white">Like on Facebook (pending)</a></li>
+            <li><a href="#" class="text-white">Email me (pending)</a></li> -->
           </ul>
         </div>
       </div>
