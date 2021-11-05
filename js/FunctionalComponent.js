@@ -255,7 +255,20 @@ let privateMethods = function () {
         var node = document.createElement('section');
         this[STATE_INDEX] = 0
         Array.prototype.toString = this[CUSTOM_MAP]
-        let string = this.constructor(this.prop) // constructor as a second time
+        let string = this.constructor(this.prop)
+        let tags = string.split('/>') //self closing tags
+        if(tags.length>1){
+            let last = tags.pop()
+            let final = tags.map(a=>{
+                let tmp = a.split("<")
+                let last = tmp[tmp.length-1]
+                let tagName = last.split(' ')[0]
+                return a+`></${tagName}>`
+            })
+            final.push(last)
+            string = final.join('')
+            console.log(string);
+        }
         Array.prototype.toString = this[ORIGINAL_MAP]
         this[DEFAUT_STATE_DONE] = true
         node.innerHTML = string
