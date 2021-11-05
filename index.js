@@ -1,25 +1,16 @@
 import getComponent from './js/FunctionalComponent.js';
-
-function Calculator({ name = 'Mate', calc }) {
-    return `<div>
-        <h1>Hi, ${name}!</h1> 
-        <div> 1 + 2 = ${calc && calc.sum(1, 2) || '?'}</div>
-        <div> 3 + 4 = ${(calc) ? calc.sum(3, 4) : '?'}</div>
-    </div>`;
-}
 function Main() {
-    this.enableSubComponents({ Calculator })
-    //ok
-    this.nameProvider = () => 'Hello'
-    //ok
-    this.nameProvider = function(){ return 'Hello' }
-    //bad
-    this.nameProvider(){ return 'Hello' }
-    
+    const [variable, setVariable, value] = this.variableDispatcher('Default value')
+    variable.subscribe(
+        (newValue) => console.log(newValue) // New value 
+    ) 
+    console.log(variable.value) // Default value
+    console.log(value) // Default value 
+    setVariable('New value')
+    console.log(variable.value) //  New value 
+    console.log(value) // Default value <= Not updated
     return `<div>
-        <Calculator name="Sara" />
-        <Calculator name="Cahal" />
-        <Calculator calc="objectSender" />
+        Working with variableDispatcher
     </div>`
 }
 getComponent(Main).kiwiSelector('body')

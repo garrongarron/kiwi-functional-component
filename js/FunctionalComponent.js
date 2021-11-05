@@ -21,6 +21,11 @@ const validatePrimitive = (variable) => {
         throw `Argument is not an string, number or undefined : '${variable}' in primitiveDispatcher() method.`
     }
 }
+const validateArray = (database) => {
+    if (!Array.isArray(database)) {
+        throw `Argument is not an array: '${database}' in arrayDispacher() method.`
+    }
+}
 const FIRST_TIME = Symbol('firstTime')
 const STATE_INDEX = Symbol('stateIndex')
 const DEFAUT_STATE_DONE = Symbol('defaultStateDone')
@@ -85,9 +90,7 @@ let publicMethods = {
         yield i + 10;
     },
     arrayDispatcher: function (database = []) {
-        if (!Array.isArray(database)) {
-            throw `Argument is not an array: '${database}' in arrayDispacher() method.`
-        }
+        validateArray(database)
         const callbacks = []
         const list = {
             get items() { return [...database] },
@@ -96,9 +99,12 @@ let publicMethods = {
             }
         }
         let updateList = (newDatabase) => {
-            console.log(newDatabase);
-            database = newDatabase
-            callbacks.forEach(c => c())
+            validateArray(database)
+            database.length = 0;
+            newDatabase.forEach(element => {
+                database.push(element);
+            })
+            callbacks.forEach(callback => callback([...database]))
         }
         return [list, updateList, database]
     },
@@ -115,7 +121,7 @@ let publicMethods = {
         let updateStore = (newValue) => {
             validatePrimitive(newValue)
             valueStored = newValue
-            callbacks.forEach(c => c())
+            callbacks.forEach(callback => callback(newValue))
         }
         return [store, updateStore, valueStored]
     },
@@ -226,17 +232,17 @@ let privateMethods = function () {
             oldNodes.forEach((node, index) => {
                 let generated = newNodes[index]
                 let tmp = {}
-                for (const attr of node.attributes) { 
+                for (const attr of node.attributes) {
                     tmp[attr.name] = attr.value
                 }
-                for (const attr of generated.attributes) { 
+                for (const attr of generated.attributes) {
                     tmp[attr.name] = attr.value
                 }
                 Object.keys(tmp).forEach((key) => {
-                    if(generated.getAttribute(key)==null){
+                    if (generated.getAttribute(key) == null) {
                         node.removeAttribute(key)
-                    } else{
-                        if(node.getAttribute(key)!=generated.getAttribute(key)){
+                    } else {
+                        if (node.getAttribute(key) != generated.getAttribute(key)) {
                             node.setAttribute(key, generated.getAttribute(key))
                         }
                     }
@@ -257,13 +263,13 @@ let privateMethods = function () {
         Array.prototype.toString = this[CUSTOM_MAP]
         let string = this.constructor(this.prop)
         let tags = string.split('/>') //self closing tags
-        if(tags.length>1){
+        if (tags.length > 1) {
             let last = tags.pop()
-            let final = tags.map(a=>{
+            let final = tags.map(a => {
                 let tmp = a.split("<")
-                let last = tmp[tmp.length-1]
+                let last = tmp[tmp.length - 1]
                 let tagName = last.split(' ')[0]
-                return a+`></${tagName}>`
+                return a + `></${tagName}>`
             })
             final.push(last)
             string = final.join('')

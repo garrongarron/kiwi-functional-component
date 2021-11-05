@@ -11,6 +11,7 @@ const documentationList = {
     // "LiftingStateUp": "Lifting State Up",
     // "CompositionVsInheritance": "Composition Vs Inheritance",
     // "ThinkingInReact": "Thinking In React"
+    "CustomObservers": "Custom Observers"
   }
 
 

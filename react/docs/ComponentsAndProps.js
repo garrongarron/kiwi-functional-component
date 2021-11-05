@@ -86,10 +86,10 @@ getComponent(Main).kiwiSelector(&#39;body&#39;)`
     </h2>
 
     <article class="blog-post">
-      <h3 class="blog-post-title">Consider this variable declaration:</h3> 
+      <h3 class="blog-post-title">Component represent HTMLElement:</h3> 
       <p class="blog-post-meta">November 4, 2021 by <a href="https://twitter.com/samugarrondev" target="_blank" rel="noopener noreferrer"> @samugarrondev</a></p>
       <p>Components let you split the UI into independent, reusable pieces, and think about each piece in isolation. This page provides an introduction to the idea of components.</p>
-      <p>Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return React elements describing what should appear on the screen.<p>
+      <p>Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return a string describing what should appear on the screen.<p>
       <hr>
       <h2>Function Components</h2>
       <p>The simplest way to define a component is to write a JavaScript function:</p>
@@ -126,7 +126,7 @@ getComponent(Main).kiwiSelector(&#39;body&#39;)`
       <p>Kisi JS is really flexible you can also send object as a props.</p>
 
 
-      <h3>Methods as a properties</h3>
+      <h3>Methods as properties</h3>
       <p>In the following example you will see how <strong>custom method</strong> is send as a prop to a sub-component.</p>
       <DisplayCode full="true" content="properties"></DisplayCode>
       <p>You can also use destructuring assignment syntax to handle the props in a better way.</p>

@@ -24,7 +24,7 @@ export default function HandlingEvents() {
     </h2>
 
     <article class="blog-post">
-      <h3 class="blog-post-title">How to handle event in Kiwi JS:</h3>
+      <h3 class="blog-post-title">How to handle events in Kiwi JS:</h3>
       <p class="blog-post-meta">November 4, 2021 by <a href="https://twitter.com/samugarrondev" target="_blank" rel="noopener noreferrer">@samugarrondev</a></p>
 
       <DisplayCode filename="Todo" id="a" full="false"></DisplayCode>
