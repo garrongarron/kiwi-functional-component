@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <title>Kiwi JS - Hello World</title>
-    <script src="js/FunctionalComponent.js" defer></script>
     <script src="src/HelloWorld.js" type="module"></script>
 </head>
 <body>

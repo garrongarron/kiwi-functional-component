@@ -33,7 +33,11 @@ export default function HelloWorld() {
         There create the following <strong>index.html</strong> file.</p>
         <DisplayCode filename="index.html" full="true" id="index" type="html"  ></DisplayCode>
       <p> Then you can create a <strong>js</strong> sub-folder to place the <strong>FunctionalComponent.js</strong> library that you can download from <a href="#">here</a>. </p>
-      <p>After that, write the following EcmaScript 6 module into a <strong>src</strong> sub-folder named <strong>HelloWorld.js</strong>.</p>
+      <DisplayCode filename="Folder structure" full="true" id="index" type="bash" content="${`index.html
+js/FunctionalComponent.js
+src/HelloWorld.js`}" ></DisplayCode>
+
+      <p>After that, write the following EcmaScript 6 module named <strong>HelloWorld.js</strong> into a <strong>src</strong> sub-folder.</p>
         <DisplayCode filename="src/HelloWorld.js" full="true" id="hello-world" type="javascript"></DisplayCode>
       <p>It displays a heading saying “Hello, World!” on the page.</p>
         
