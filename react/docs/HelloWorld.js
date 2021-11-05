@@ -32,7 +32,7 @@ export default function HelloWorld() {
       <p>The fist step to try this library is create a specific foolder for the project. 
         There create the following <strong>index.html</strong> file.</p>
         <DisplayCode filename="index.html" full="true" id="index" type="html"  ></DisplayCode>
-      <p> Then you can create a <strong>js</strong> sub-folder to place the <strong>FunctionalComponent.js</strong> library that you can download from <a href="#">here</a>. </p>
+      <p> Then you can create a <strong>js</strong> sub-folder to place the <strong>FunctionalComponent.js</strong> library that you can download from <a href="https://raw.githubusercontent.com/garrongarron/kiwi-functional-component/main/js/FunctionalComponent.js" target="_blank" rel="noopener noreferrer">here</a>. </p>
       <DisplayCode filename="Folder structure" full="true" id="index" type="bash" content="${`index.html
 js/FunctionalComponent.js
 src/HelloWorld.js`}" ></DisplayCode>
