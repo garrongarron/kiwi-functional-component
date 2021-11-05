@@ -28,6 +28,7 @@ export default function Aside() {
         <h4 class="fst-italic">About</h4>
         <p class="mb-0">This library was made after research the React library features and pretends reduce the boilerplate and improve the developer experience. It is native, small, and fast... There is no lighter at the moment but the "string-highlight
 " extension by Jenkey2011 could help to highlight the Template Literals in Visual Studio Code.</p>
+        <p>Download the library from <a href="https://raw.githubusercontent.com/garrongarron/kiwi-functional-component/main/js/FunctionalComponent.js" target="_blank" rel="noopener noreferrer">here</a></p>
       </div>
     </div>
   </div>`
