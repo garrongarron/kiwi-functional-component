@@ -39,6 +39,7 @@ const EXEC = Symbol('exec')
 const CUSTOM_MAP = Symbol('customMap')
 const ORIGINAL_MAP = Symbol('customMap')
 const REFRESH = Symbol('refresh')
+const RERENDER = Symbol('re-render')
 let publicMethods = {
     beforeAppendChild: function (parentNode) { },
     prop: {},
@@ -69,17 +70,7 @@ let publicMethods = {
                     Object.assign(this.state[n], (typeof newState == 'function') ? newState() : newState)
                 }
                 this.state[n] = newState
-                let old = this.node
-                let parent = this.node.parentNode
-                this[SETING_LISTENER](this.node.parentNode, true)
-                let newObject = this[EXEC](true)
-                let refresh = this[REFRESH](old, newObject)
-                if (refresh) {
-                    old.parentNode.replaceChild(newObject, old)//?
-                } else {
-                    this.node = old
-                    this[SETING_LISTENER](parent)
-                }
+                this[RERENDER]()
                 insideTheDom.check()
             }
         ]
@@ -88,6 +79,16 @@ let publicMethods = {
     outOfDom: function* generator(i) {
         yield null;
         yield i + 10;
+    },
+    useReducer: function (reducer, initialState = {}) {
+        if (!this[DEFAUT_STATE_DONE])
+            this.state = initialState
+
+        
+        return [this.state, (argument) => {
+            this.state = reducer(this.state, argument)
+            this[RERENDER]()
+        }]
     },
     arrayDispatcher: function (database = []) {
         validateArray(database)
@@ -212,16 +213,19 @@ let privateMethods = function () {
     this[CUSTOM_MAP] = function () { return this.join(' ') }
     this[REFRESH] = function (old, newNode) {
         let refresh = true
-        function process(n1, n2) {
+        function process(n1, n2) {// Update textContent
+            let textContentChaneges = false
             if (n1.lenght == n2.lenght) {
                 n1.forEach((text, index) => {
                     if (text.textContent != n2[index].textContent) {
                         if (text.nodeName != n2[index].nodeName) return
-                        text.textContent = n2[index].textContent
+                        text.childNodes[0].textContent = n2[index].childNodes[0].textContent
                         refresh = false
+                        textContentChaneges = true
                     }
                 })
             }
+            if(!textContentChaneges) refresh =  false
         }
         let oldNodes = old.querySelectorAll('*')
         let newNodes = newNode.querySelectorAll('*')
@@ -231,6 +235,7 @@ let privateMethods = function () {
         try {
             oldNodes.forEach((node, index) => {
                 let generated = newNodes[index]
+                //Attributes start
                 let tmp = {}
                 for (const attr of node.attributes) {
                     tmp[attr.name] = attr.value
@@ -238,15 +243,20 @@ let privateMethods = function () {
                 for (const attr of generated.attributes) {
                     tmp[attr.name] = attr.value
                 }
+                let attrChaneges = false
                 Object.keys(tmp).forEach((key) => {
                     if (generated.getAttribute(key) == null) {
                         node.removeAttribute(key)
+                        attrChaneges = true
                     } else {
                         if (node.getAttribute(key) != generated.getAttribute(key)) {
                             node.setAttribute(key, generated.getAttribute(key))
+                            attrChaneges = true
                         }
                     }
                 })
+                if(attrChaneges) return false
+                //Attributes ENDS
                 let q1 = node.childNodes
                 let q2 = generated.childNodes
                 process(q1, q2);
@@ -255,6 +265,19 @@ let privateMethods = function () {
             console.error("SOMETHING WRONG: ", error);
         }
         return refresh
+    }
+    this[RERENDER] = function(){
+        let old = this.node
+        let parent = this.node.parentNode
+        this[SETING_LISTENER](this.node.parentNode, true)
+        let newObject = this[EXEC](true)
+        let refresh = this[REFRESH](old, newObject)
+        if (refresh) {
+            old.parentNode.replaceChild(newObject, old)//?
+        } else {
+            this.node = old
+            this[SETING_LISTENER](parent)
+        }
     }
     this[EXEC] = function (again) {
         //@TODO AVOID TAG NO CLOSED
