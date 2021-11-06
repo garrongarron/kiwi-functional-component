@@ -1,34 +1,26 @@
 import getComponent from './js/FunctionalComponent.js';
 
-function reducer(state, action) {
-    switch (action.type) {
-        case 'hello':
-            return { ...state, name: 'Peter '+ (n++) }
-            break;
-
-        default:
-            break;
-
-    }
-    return state
+function SubComponent({name}){
+    this.useEffect(() => {
+        console.log(n);
+    }, []) // [n]
+    return `<li> hello ${name + ' ' + (n)}</li>`
 }
-const initialState = {
-    name: 'Jhon'
-}
+
 let n = 0
+
 function Main() {
-    const [{ name }, dispatch] = this.useReducer(reducer, initialState);
+    this.enableSubComponents({SubComponent})
+    let [name, setName] = this.useState("John")    
     setTimeout(() => {
-        dispatch({ type: 'hello' })
+        n++
+        setName(name)
     }, 1000);
-
-
-
     return `<div>
         <ul>
-            <li> hello ${name}</li>
+            <SubComponent name=${name}>
         </ul>
     </div>`
 }
-getComponent(Main).kiwiSelector('body')
 
+getComponent(Main).kiwiSelector('body')
