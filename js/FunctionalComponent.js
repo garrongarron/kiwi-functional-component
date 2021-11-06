@@ -44,13 +44,17 @@ const USE_EFFECT_CALLBACKS = Symbol('useEffectCallbacks')
 const USE_EFFECT_CALLBACKS_PREV = Symbol('useEffectCallbacksPrev')
 const RUN_SIDE_EFFECTS = Symbol('runSideEffects')
 let publicMethods = {
-    useEffect:function(callback, dependencies = []) {
+    useEffect: function (callback, dependencies = []) {
         this[USE_EFFECT_CALLBACKS].push([callback, JSON.stringify(dependencies)])
     },
     beforeAppendChild: function (parentNode) { },
     prop: {},
     noProp: ["beforeAppendChild", "prop", "enableSubComponents", "enableEvents", "kiwiSelector", "useState", "noProp"],
     enableSubComponents: function (params) {
+        if(Array.isArray(params)) {
+            let message = "this.enableSubComponents() only allow Objects but not allows arrays."
+            throw message+'\n'+this.constructor
+        }
         this[SUB_COMPONENTS] = params
     },
     enableEvents: function (params) {
@@ -90,7 +94,7 @@ let publicMethods = {
         if (!this[DEFAUT_STATE_DONE])
             this.state = initialState
 
-        
+
         return [this.state, (argument) => {
             this.state = reducer(this.state, argument)
             this[RERENDER]()
@@ -135,13 +139,16 @@ let publicMethods = {
 
 }
 let privateMethods = function () {
-    this[RUN_SIDE_EFFECTS] = function () {
-        this[USE_EFFECT_CALLBACKS].forEach((sideEffet, index)=>{
+    this[RUN_SIDE_EFFECTS] = function (parent) {
+        this[USE_EFFECT_CALLBACKS].forEach((sideEffet, index) => {
             let hash = this[USE_EFFECT_CALLBACKS_PREV][index] || null
-            if(hash != sideEffet[1]){
-                sideEffet[0]()
+            if (hash != sideEffet[1]) {
+                let clean = sideEffet[0](parent)
+                if (typeof clean == 'function') {
+                    insideTheDom.add(this, clean)
+                }
                 this[USE_EFFECT_CALLBACKS_PREV][index] = sideEffet[1]
-            } 
+            }
         })
         this[USE_EFFECT_CALLBACKS] = []
     }
@@ -243,7 +250,7 @@ let privateMethods = function () {
                     }
                 })
             }
-            if(!textContentChaneges) refresh =  false
+            if (!textContentChaneges) refresh = false
         }
         let oldNodes = old.querySelectorAll('*')
         let newNodes = newNode.querySelectorAll('*')
@@ -273,7 +280,7 @@ let privateMethods = function () {
                         }
                     }
                 })
-                if(attrChaneges) return false
+                if (attrChaneges) return false
                 //Attributes ENDS
                 let q1 = node.childNodes
                 let q2 = generated.childNodes
@@ -284,7 +291,7 @@ let privateMethods = function () {
         }
         return refresh
     }
-    this[RERENDER] = function(){
+    this[RERENDER] = function () {
         let old = this.node
         let parent = this.node.parentNode
         this[SETING_LISTENER](this.node.parentNode, true)
@@ -297,6 +304,7 @@ let privateMethods = function () {
             this[SETING_LISTENER](parent)
         }
         this[RUN_SIDE_EFFECTS](parent)
+        
     }
     this[EXEC] = function (again) {
         //@TODO AVOID TAG NO CLOSED
@@ -324,12 +332,11 @@ let privateMethods = function () {
         let tmp = this[FIRST_TIME]
         if (this[FIRST_TIME]) {
             this[FIRST_TIME] = false
-            let clean = this.beforeAppendChild(node)
-            if (typeof clean == 'function') {
-                insideTheDom.add(this, clean)
-            }
+            this.beforeAppendChild(node)
         }
-        if(tmp) this[RUN_SIDE_EFFECTS](node)
+        if (tmp) {
+            this[RUN_SIDE_EFFECTS](node)
+        }
         this.node = node.children[0]
         if (!this.node) throw `Check the return of ${this.constructor.name}` + '\n' + `${this.constructor.toString()}`
         return this.node

@@ -1,26 +1,29 @@
 import getComponent from './js/FunctionalComponent.js';
 
-function SubComponent({name}){
-    this.useEffect(() => {
-        console.log(n);
-    }, []) // [n]
-    return `<li> hello ${name + ' ' + (n)}</li>`
+function Hijo({ n }) {
+    this.useEffect((a) => {
+        console.log('Start', n)
+        return () => {
+            console.log('End', n)
+        }
+    })
+    return `<button >Add #1</button>`
 }
 
-let n = 0
-
-function Main() {
-    this.enableSubComponents({SubComponent})
-    let [name, setName] = this.useState("John")    
-    setTimeout(() => {
-        n++
-        setName(name)
-    }, 1000);
+function HelloMessage({ prop = "Taylor" }) {
+    let [items, setItems] = this.useState(true)
+    this.enableSubComponents({ Hijo })
+    this.enableEvents(['click'])
+    this.toggle = () => {
+        setItems(!items)
+    }
     return `<div>
-        <ul>
-            <SubComponent name=${name}>
-        </ul>
+        Hello ${prop}
+        <button click="toggle">Click me</button>
+        ${(items) ? `<Hijo n="1"></Hijo>` : ''}
     </div>`
 }
 
-getComponent(Main).kiwiSelector('body')
+
+let root = getComponent(HelloMessage)
+root.kiwiSelector('body')
