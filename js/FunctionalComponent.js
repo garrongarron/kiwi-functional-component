@@ -1,3 +1,4 @@
+let id = 0
 const insideTheDom = {
     components: [],
     check: function () {
@@ -36,24 +37,41 @@ const SUB_COMPONENTS = Symbol('subComponent')
 const LISTENERS = Symbol('listeners')
 const SETING_LISTENER = Symbol('settingListener')
 const EXEC = Symbol('exec')
-const CUSTOM_MAP = Symbol('customMap')
-const ORIGINAL_MAP = Symbol('customMap')
 const REFRESH = Symbol('refresh')
 const RERENDER = Symbol('re-render')
 const USE_EFFECT_CALLBACKS = Symbol('useEffectCallbacks')
 const USE_EFFECT_CALLBACKS_PREV = Symbol('useEffectCallbacksPrev')
 const RUN_SIDE_EFFECTS = Symbol('runSideEffects')
+const HOOK_BEHAVIOUR = Symbol('hookBehaviour')
 let publicMethods = {
-    useEffect: function (callback, dependencies = []) {
-        this[USE_EFFECT_CALLBACKS].push([callback, JSON.stringify(dependencies)])
+    runAsHook: function () {
+        this[HOOK_BEHAVIOUR] = true
+        this[STATE_INDEX] = 0
+        // this[DEFAUT_STATE_DONE] = true
+    },
+    useEffect: function (callback, dependencies = [], id) {
+        let hash = JSON.stringify(dependencies)
+        if (!this[USE_EFFECT_CALLBACKS][this.id]) this[USE_EFFECT_CALLBACKS][this.id] = []
+        let index = this[USE_EFFECT_CALLBACKS][this.id].length
+        this[USE_EFFECT_CALLBACKS][this.id].push([callback, hash])
+        // console.log(this[USE_EFFECT_CALLBACKS_PREV][index] ,  hash);
+        if (this[USE_EFFECT_CALLBACKS_PREV][index] != hash) {
+            if (this[HOOK_BEHAVIOUR]) {
+                this[USE_EFFECT_CALLBACKS_PREV][index] = hash
+                let clean = callback()
+                if (typeof clean == 'function') {
+                    insideTheDom.add(this, clean)
+                }
+            }
+        }
     },
     beforeAppendChild: function (parentNode) { },
     prop: {},
     noProp: ["beforeAppendChild", "prop", "enableSubComponents", "enableEvents", "kiwiSelector", "useState", "noProp"],
     enableSubComponents: function (params) {
-        if(Array.isArray(params)) {
+        if (Array.isArray(params)) {
             let message = "this.enableSubComponents() only allow Objects but not allows arrays."
-            throw message+'\n'+this.constructor
+            throw message + '\n' + this.constructor
         }
         this[SUB_COMPONENTS] = params
     },
@@ -80,15 +98,15 @@ let publicMethods = {
                     Object.assign(this.state[n], (typeof newState == 'function') ? newState() : newState)
                 }
                 this.state[n] = newState
+                if (this[HOOK_BEHAVIOUR]) {
+                    this[STATE_INDEX] = 0
+                    this[DEFAUT_STATE_DONE] = true
+                }
                 this[RERENDER]()
                 insideTheDom.check()
             }
         ]
 
-    },
-    outOfDom: function* generator(i) {
-        yield null;
-        yield i + 10;
     },
     useReducer: function (reducer, initialState = {}) {
         if (!this[DEFAUT_STATE_DONE])
@@ -117,7 +135,7 @@ let publicMethods = {
             })
             callbacks.forEach(callback => callback([...database]))
         }
-        return [list, updateList, database]
+        return [list, updateList, [...database]]
     },
     variableDispatcher: function (variable) {
         validatePrimitive(variable)
@@ -136,23 +154,24 @@ let publicMethods = {
         }
         return [store, updateStore, valueStored]
     },
-
 }
 let privateMethods = function () {
+    this[HOOK_BEHAVIOUR] = false
     this[RUN_SIDE_EFFECTS] = function (parent) {
-        this[USE_EFFECT_CALLBACKS].forEach((sideEffet, index) => {
-            let hash = this[USE_EFFECT_CALLBACKS_PREV][index] || null
-            if (hash != sideEffet[1]) {
+        if (!this[USE_EFFECT_CALLBACKS][this.id]) return
+        this[USE_EFFECT_CALLBACKS][this.id].forEach((sideEffet, index) => {
+            if(this[USE_EFFECT_CALLBACKS_PREV][index] !=  sideEffet[1]){
+                this[USE_EFFECT_CALLBACKS_PREV][index] = sideEffet[1]
                 let clean = sideEffet[0](parent)
                 if (typeof clean == 'function') {
                     insideTheDom.add(this, clean)
                 }
-                this[USE_EFFECT_CALLBACKS_PREV][index] = sideEffet[1]
             }
+            
         })
-        this[USE_EFFECT_CALLBACKS] = []
+        this[USE_EFFECT_CALLBACKS][this.id] = []
     }
-    this[USE_EFFECT_CALLBACKS] = []
+    this[USE_EFFECT_CALLBACKS] = {}
     this[USE_EFFECT_CALLBACKS_PREV] = []
     this[FIRST_TIME] = true
     this[STATE_INDEX] = 0
@@ -234,8 +253,6 @@ let privateMethods = function () {
             }
         });
     }
-    this[ORIGINAL_MAP] = Array.prototype.toString
-    this[CUSTOM_MAP] = function () { return this.join(' ') }
     this[REFRESH] = function (old, newNode) {
         let refresh = true
         function process(n1, n2) {// Update textContent
@@ -244,7 +261,9 @@ let privateMethods = function () {
                 n1.forEach((text, index) => {
                     if (text.textContent != n2[index].textContent) {
                         if (text.nodeName != n2[index].nodeName) return
-                        text.childNodes[0].textContent = n2[index].childNodes[0].textContent
+                        if (text.childNodes[0] && n2[index].childNodes[0])
+                            text.childNodes[0].textContent = n2[index].childNodes[0].textContent
+                        else text.textContent = n2[index].textContent
                         refresh = false
                         textContentChaneges = true
                     }
@@ -257,6 +276,11 @@ let privateMethods = function () {
         if (oldNodes.length != newNode.querySelectorAll('*').length) {
             return true
         }
+        oldNodes.forEach((node, index) => {
+            if (node.tagName != newNodes[index].tagName) {
+                node.parentNode.replaceChild(newNodes[index].cloneNode(true), node)
+            }
+        })
         try {
             oldNodes.forEach((node, index) => {
                 let generated = newNodes[index]
@@ -292,26 +316,34 @@ let privateMethods = function () {
         return refresh
     }
     this[RERENDER] = function () {
-        let old = this.node
-        let parent = this.node.parentNode
-        this[SETING_LISTENER](this.node.parentNode, true)
-        let newObject = this[EXEC](true)
-        let refresh = this[REFRESH](old, newObject)
-        if (refresh) {
-            old.parentNode.replaceChild(newObject, old)//?
-        } else {
-            this.node = old
-            this[SETING_LISTENER](parent)
+        try {
+            let old = this.node
+            let parent = this.node.parentNode
+            this[SETING_LISTENER](this.node.parentNode, true)
+            let newObject = this[EXEC](true)
+            let refresh = this[REFRESH](old, newObject)
+            if (refresh) {
+                old.parentNode.replaceChild(newObject, old)//?
+            } else {
+                this.node = old
+                this[SETING_LISTENER](parent)
+            }
+            this[RUN_SIDE_EFFECTS](parent)
+        } catch (error) {
+            // console.log(error);
         }
-        this[RUN_SIDE_EFFECTS](parent)
-        
     }
     this[EXEC] = function (again) {
         //@TODO AVOID TAG NO CLOSED
         var node = document.createElement('section');
         this[STATE_INDEX] = 0
-        Array.prototype.toString = this[CUSTOM_MAP]
+        Array.prototype.toString = function () {
+            return this.join('')
+        }
         let string = this.constructor(this.prop)
+        if (this[HOOK_BEHAVIOUR]) {
+            return string
+        }
         let tags = string.split('/>') //self closing tags
         if (tags.length > 1) {
             let last = tags.pop()
@@ -324,7 +356,9 @@ let privateMethods = function () {
             final.push(last)
             string = final.join('')
         }
-        Array.prototype.toString = this[ORIGINAL_MAP]
+        Array.prototype.toString = function () {
+            return this.join(',')
+        }
         this[DEFAUT_STATE_DONE] = true
         node.innerHTML = string
         this[SETING_LISTENER](node)
@@ -344,11 +378,18 @@ let privateMethods = function () {
     return this
 }
 const component = privateMethods.bind(publicMethods)()
-function emptyComponent() { }
-Object.assign(emptyComponent.prototype, component)
+function KiwiComponent() { }
 let getComponent = (Component) => {
-    let instanceComponet = new emptyComponent()
+    let instanceComponet = new KiwiComponent();
+    let setters = key => {
+        instanceComponet[key] = typeof component[key] == 'object' ? Array.isArray(component[key]) ? [] : {} : typeof component[key] == 'function' ? component[key].bind(instanceComponet) : component[key]
+    }
+    Object.keys(component).map(setters)
+    Object.getOwnPropertySymbols(component).forEach(setters);
     instanceComponet.constructor = Component
+    if (instanceComponet[FIRST_TIME]) {
+        instanceComponet.id = id++
+    }
     return instanceComponet
 }
 export default getComponent
