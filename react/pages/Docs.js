@@ -14,12 +14,13 @@ import RenderingElements from "../docs/RenderingElements.js";
 import StateAndLifecycle from "../docs/StateAndLifecycle.js";
 import ThinkingInReact from "../docs/ThinkingInReact.js";
 import CustomObservers from "../docs/CustomObservers.js";
+import Hooks from "../docs/Hooks.js";
 
 
 function Switcher(){
     this.enableSubComponents({HelloWorld, IntroducingTemplateLiterals, RenderingElements, ComponentsAndProps,
         StateAndLifecycle, HandlingEvents, ConditionalRendering, ListAndKeys, Forms, LiftingStateUp, CompositionVsInheritance, ThinkingInReact
-    ,CustomObservers})
+    ,CustomObservers, Hooks})
         
     let pages = {}
     Object.keys(documentationList).forEach(key => {

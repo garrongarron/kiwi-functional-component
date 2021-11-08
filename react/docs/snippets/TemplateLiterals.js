@@ -5,5 +5,5 @@ export default function TemplateLiterals(){
     return `<div>Hello ${name}</div>`
 }
 
-let component = getComponent(HelloWorld)
+let component = getComponent(TemplateLiterals)
 component.kiwiSelector('body')   

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack --mode=development --config webpack.config.js",
-    "prod": "webpack --mode=production --config webpack.config.js"
+    "prod": "webpack --mode=production --config webpack.config.js",
+    "build-esbuild": "esbuild react/index.js --bundle  --minify --sourcemap --splitting --format=esm --outdir=dist",
+    "server": "node esbuild.config.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +21,7 @@
   },
   "homepage": "https://github.com/garrongarron/kiwi-functional-component#readme",
   "devDependencies": {
+    "esbuild": "^0.13.12",
     "webpack": "^5.61.0",
     "webpack-cli": "^4.9.1"
   }
