@@ -3,8 +3,11 @@ const insideTheDom = {
     components: [],
     check: function () {
         insideTheDom.components.forEach(component => {
-            if (!document.contains(component.node)) {
-                component.exit()
+            if (!document.contains(component.node) && !component[HOOK_BEHAVIOUR]) {
+                console.log('exit', component.node);
+
+                if (component.exit) component.exit()
+                insideTheDom.components.filter(a => a != component)
             }
         })
     },
@@ -12,7 +15,6 @@ const insideTheDom = {
         let index = this.components.indexOf(component)
         if (index > -1) return
         this.components.push(component)
-        component.exit = clean
     }
 
 }
@@ -29,6 +31,7 @@ const validateArray = (database) => {
 }
 const FIRST_TIME = Symbol('firstTime')
 const STATE_INDEX = Symbol('stateIndex')
+const EFFECT_INDEX = Symbol('effectIndex')
 const DEFAUT_STATE_DONE = Symbol('defaultStateDone')
 const SET_PTOPERTIES = Symbol('setProperties')
 const ADD_CHILD = Symbol('addChild')
@@ -47,19 +50,47 @@ let publicMethods = {
     runAsHook: function () {
         this[HOOK_BEHAVIOUR] = true
         this[STATE_INDEX] = 0
-        // this[DEFAUT_STATE_DONE] = true
+        this[EFFECT_INDEX] = 0
     },
-    useEffect: function (callback, dependencies = [], id) {
-        let hash = JSON.stringify(dependencies)
-        if (!this[USE_EFFECT_CALLBACKS][this.id]) this[USE_EFFECT_CALLBACKS][this.id] = []
-        let index = this[USE_EFFECT_CALLBACKS][this.id].length
-        this[USE_EFFECT_CALLBACKS][this.id].push([callback, hash])
-        // console.log(this[USE_EFFECT_CALLBACKS_PREV][index] ,  hash);
-        if (this[USE_EFFECT_CALLBACKS_PREV][index] != hash) {
-            if (this[HOOK_BEHAVIOUR]) {
-                this[USE_EFFECT_CALLBACKS_PREV][index] = hash
-                let clean = callback()
+    useEffect: function (callback, dependencies = []) {
+        if (!this[HOOK_BEHAVIOUR]) {
+            let hash = JSON.stringify(dependencies)
+            let index = this[USE_EFFECT_CALLBACKS].length
+            this[USE_EFFECT_CALLBACKS].push(index)
+            this[USE_EFFECT_CALLBACKS_PREV][index] = (this[USE_EFFECT_CALLBACKS_PREV][index]) ? this[USE_EFFECT_CALLBACKS_PREV][index] : {
+                index,
+                storedHash: undefined,
+                currentHash: hash,
+                sideEffet: callback,
+                cleaner: undefined
+            }
+            this[USE_EFFECT_CALLBACKS_PREV][index].sideEffet = callback
+            this[USE_EFFECT_CALLBACKS_PREV][index].currentHash = hash
+        }
+        if (this[HOOK_BEHAVIOUR]) {
+            let index = this[EFFECT_INDEX]++
+            let hash = JSON.stringify(dependencies)
+            this[USE_EFFECT_CALLBACKS].push(index)
+            this[USE_EFFECT_CALLBACKS_PREV][index] = (this[USE_EFFECT_CALLBACKS_PREV][index]) ? this[USE_EFFECT_CALLBACKS_PREV][index] : {
+                index,
+                storedHash: undefined,
+                currentHash: hash,
+                sideEffet: callback,
+                cleaner: undefined
+            }
+            let obj = this[USE_EFFECT_CALLBACKS_PREV][index]
+            if (obj.storedHash !=hash) {
+                if (typeof obj.cleaner === 'function') {
+                    obj.cleaner()
+                } 
+                obj.cleaner = obj.sideEffet(parent)
+                obj.storedHash = hash
                 if (typeof clean == 'function') {
+                    this.exit = ()=>{
+                        this[USE_EFFECT_CALLBACKS_PREV].forEach(sideEffet=>{ 
+                            sideEffet.cleaner()
+                        })
+                    }
                     insideTheDom.add(this, clean)
                 }
             }
@@ -158,23 +189,31 @@ let publicMethods = {
 let privateMethods = function () {
     this[HOOK_BEHAVIOUR] = false
     this[RUN_SIDE_EFFECTS] = function (parent) {
-        if (!this[USE_EFFECT_CALLBACKS][this.id]) return
-        this[USE_EFFECT_CALLBACKS][this.id].forEach((sideEffet, index) => {
-            if(this[USE_EFFECT_CALLBACKS_PREV][index] !=  sideEffet[1]){
-                this[USE_EFFECT_CALLBACKS_PREV][index] = sideEffet[1]
-                let clean = sideEffet[0](parent)
+        if (!this[USE_EFFECT_CALLBACKS]) return
+        this[USE_EFFECT_CALLBACKS].forEach((sideEffet, index) => {
+            let obj = this[USE_EFFECT_CALLBACKS_PREV][index]
+            if (obj.storedHash != obj.currentHash) {
+                if (typeof obj.cleaner === 'function') {
+                    console.log('cleaner ruuning');
+                    obj.cleaner()
+                }
+                let clean = obj.sideEffet(parent)
+                obj.cleaner = clean
+                obj.storedHash = obj.currentHash
+                // console.log(obj);
                 if (typeof clean == 'function') {
-                    insideTheDom.add(this, clean)
+                    // insideTheDom.add(this, clean)
                 }
             }
-            
+
         })
-        this[USE_EFFECT_CALLBACKS][this.id] = []
+        this[USE_EFFECT_CALLBACKS] = []
     }
-    this[USE_EFFECT_CALLBACKS] = {}
+    this[USE_EFFECT_CALLBACKS] = []
     this[USE_EFFECT_CALLBACKS_PREV] = []
     this[FIRST_TIME] = true
     this[STATE_INDEX] = 0
+    this[EFFECT_INDEX] = 0
     this[DEFAUT_STATE_DONE] = false
     this[SET_PTOPERTIES] = function (attr) {
         const prop = {}
