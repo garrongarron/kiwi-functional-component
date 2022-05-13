@@ -5,7 +5,6 @@ const insideTheDom = {
         insideTheDom.components.forEach(component => {
             if (!document.contains(component.node) && !component[HOOK_BEHAVIOUR]) {
                 console.log('exit', component.node);
-
                 if (component.exit) component.exit()
                 insideTheDom.components.filter(a => a != component)
             }
@@ -125,6 +124,7 @@ let publicMethods = {
         return [
             (typeof value == 'undefined') ? value : JSON.parse(JSON.stringify(this.state[n])),
             (newState) => {
+                
                 if (typeof this.state[n] == 'object') {
                     Object.assign(this.state[n], (typeof newState == 'function') ? newState() : newState)
                 }
@@ -138,6 +138,9 @@ let publicMethods = {
             }
         ]
 
+    },
+    reRender:function(){
+        this[RERENDER]()
     },
     useReducer: function (reducer, initialState = {}) {
         if (!this[DEFAUT_STATE_DONE])
@@ -369,7 +372,7 @@ let privateMethods = function () {
             }
             this[RUN_SIDE_EFFECTS](parent)
         } catch (error) {
-            // console.log(error);
+            console.error(error);
         }
     }
     this[EXEC] = function (again) {
@@ -430,5 +433,5 @@ let getComponent = (Component) => {
         instanceComponet.id = id++
     }
     return instanceComponet
-}
+};
 export default getComponent
